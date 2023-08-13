@@ -6,13 +6,43 @@ class AppTheme {
   static ThemeData theme = ThemeData(
     primaryColor: Pallete.whiteColor,
     textTheme: const TextTheme(
-      
+      titleLarge: TextStyle(
+        color: Pallete.whiteColor,
+        fontSize: 28,
+        fontWeight: FontWeight.normal,
+      ),
+      titleMedium: TextStyle(
+        color: Pallete.whiteColor,
+        fontSize: 20,
+        fontWeight: FontWeight.w700,
+      ),
+      titleSmall: TextStyle(
+        color: Pallete.whiteColor,
+        fontSize: 18,
+        fontWeight: FontWeight.w700,
+      ),
+      bodyLarge: TextStyle(
+        color: Pallete.whiteColor,
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      ),
+      bodyMedium: TextStyle(
+        color: Pallete.whiteColor,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+      ),
+      bodySmall: TextStyle(
+        color: Pallete.whiteColor,
+        fontSize: 12,
+        fontWeight: FontWeight.w400,
+      ),
     ),
     pageTransitionsTheme: PageTransitionsTheme(builders: {
       TargetPlatform.android: ExtendedBlackScreenTransitionsBuilder(),
-      TargetPlatform.iOS: ZoomPageTransitionsBuilder(),
+      TargetPlatform.iOS: const ZoomPageTransitionsBuilder(),
     }),
     splashFactory: NoSplash.splashFactory,
+    fontFamily: 'HevleticaNowDisplay',
     highlightColor: Colors.transparent,
     splashColor: Colors.transparent,
     hoverColor: Colors.transparent,
@@ -22,7 +52,7 @@ class AppTheme {
       elevation: 0,
     ),
     primaryTextTheme: const TextTheme(
-      headline6: TextStyle(
+      titleLarge: TextStyle(
         color: Pallete.whiteColor,
         fontSize: 18,
         fontWeight: FontWeight.w700,

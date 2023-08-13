@@ -40,7 +40,7 @@ class DelayedBlackScreen extends StatefulWidget {
   final Duration duration;
   final Widget child;
 
-  DelayedBlackScreen({required this.duration, required this.child});
+  const DelayedBlackScreen({super.key, required this.duration, required this.child});
 
   @override
   _DelayedBlackScreenState createState() => _DelayedBlackScreenState();

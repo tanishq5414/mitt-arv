@@ -23,6 +23,7 @@ class MovieControllerNotifier extends StateNotifier<bool> {
   MovieControllerNotifier(this._moviesApi, this._ref) : super(false);
 
   Future<void> getTopRatedMovies({required context, required page}) async {
+    Future.delayed(const Duration(seconds: 10));
     final res = await _moviesApi.getTopRatedMovies(page: page);
     res.fold((l) => showSnackBar(context, l.message), (r) {
       _ref.read(trendingMoviesProvider.notifier).update((state) => r);

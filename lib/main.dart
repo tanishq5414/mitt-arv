@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/features/home/views/homepage.dart';
+import 'package:mittarv/theme/app_theme.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
@@ -14,10 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MittaRV',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      theme: AppTheme.theme,
       home: const HomePageView(),
     );
   }
