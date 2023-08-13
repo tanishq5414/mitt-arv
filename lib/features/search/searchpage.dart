@@ -60,32 +60,41 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                textAlign: TextAlign.right,
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Pallete.whiteColor,
-                    ),
-                controller: _searchController,
-                decoration: InputDecoration(
-                  hintStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 25),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  textAlign: TextAlign.right,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Pallete.whiteColor,
                       ),
-                  hintText: 'Search...',
-                  border: InputBorder.none,
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          color: Pallete.whiteColor,
+                        ),
+                    hintText: 'Search For Movies',
+                    focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Pallete.greyColor,
+                      ),
+                    ),
+                    enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Pallete.whiteColor,
+                      ),
+                    ),
+                  ),
+                  onChanged: _onSearchTextChanged,
                 ),
-                onChanged: _onSearchTextChanged,
               ),
-            ),
-            _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : Expanded(
-                    flex: 1,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
+              _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : Expanded(
+                      flex: 1,
                       child: ListView.builder(
                         shrinkWrap: true,
                         itemCount: _searchResults.length,
@@ -98,8 +107,8 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
                         },
                       ),
                     ),
-                  ),
-          ],
+            ],
+          ),
         ),
       ),
     );
