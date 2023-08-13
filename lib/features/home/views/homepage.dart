@@ -2,14 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:mittarv/common/movie_preview_component.dart';
 import 'package:mittarv/config.dart';
 import 'package:mittarv/features/movies/controllers/moviecontroller.dart';
 import 'package:mittarv/features/search/searchpage.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:mittarv/theme/pallete.dart';
-import 'dart:ui';
-
-import 'package:simple_icons/simple_icons.dart';
 
 class HomePageView extends ConsumerStatefulWidget {
   const HomePageView({Key? key}) : super(key: key);
@@ -67,17 +65,29 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
+          toolbarHeight: 80,
           centerTitle: true,
           backgroundColor: Colors.transparent,
           actions: [
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  SearchPageView.route(),
-                );
-              },
-              icon: const Icon(Icons.search),
+            Container(
+              margin: const EdgeInsets.only(right: 20),
+              decoration: BoxDecoration(
+                color: Pallete.whiteColor.withOpacity(0.5),
+                shape: BoxShape.circle,
+              ),
+              child: IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: Pallete.backgroundColor,
+                  shape: const CircleBorder(),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    SearchPageView.route(),
+                  );
+                },
+                icon: const Icon(Icons.search),
+              ),
             ),
           ],
         ),
@@ -90,43 +100,119 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                   ? const Center(child: CircularProgressIndicator())
                   : Stack(
                       children: [
-                        Stack(
+                        Column(
                           children: [
-                            Container(
-                              height: size.height * 0.7,
-                              width: size.width,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: CachedNetworkImageProvider(
-                                    "$tmdbImageURL/${trendingMovies[12].posterPath}",
+                            Stack(
+                              children: [
+                                Container(
+                                  height: size.height * 0.7,
+                                  width: size.width,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: CachedNetworkImageProvider(
+                                        "$tmdbImageURL/${trendingMovies[12].posterPath}",
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                  fit: BoxFit.cover,
                                 ),
-                              ),
+                                Container(
+                                  height: size.height * 0.7,
+                                  width: size.width,
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Colors.transparent,
+                                        Colors.transparent,
+                                        Colors.transparent,
+                                        Colors.transparent,
+                                        Colors.transparent,
+                                        Pallete.backgroundColor,
+                                      ],
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  height: size.height * 0.7,
+                                  width: size.width,
+                                  color: Pallete.backgroundColor
+                                      .withOpacity(backgroundOpacity),
+                                ),
+                              ],
                             ),
-                            Container(
-                              height: size.height * 0.7,
-                              width: size.width,
-                              decoration: const BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.transparent,
-                                    Colors.transparent,
-                                    Colors.transparent,
-                                    Colors.transparent,
-                                    Colors.transparent,
-                                    Pallete.backgroundColor,
+                            Stack(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Rating: ',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
+                                            ),
+                                            Text(
+                                              '${trendingMovies[12].voteAverage} ⭐',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .copyWith(
+                                                    color: Color.fromARGB(
+                                                        255, 215, 202, 202),
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          '${trendingMovies[12].genreIds![0]}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                color: Color.fromARGB(
+                                                    255, 215, 202, 202),
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Pallete.whiteColor,
+                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 30, vertical: 10),
+                                          child: Text('Details',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge),
+                                        ),
+                                      ),
+                                    ),
                                   ],
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
                                 ),
-                              ),
-                            ),
-                            Container(
-                              height: size.height * 0.7,
-                              width: size.width,
-                              color: Pallete.backgroundColor
-                                  .withOpacity(backgroundOpacity),
+                                Container(
+                                  height: size.height * 0.2,
+                                  width: size.width,
+                                  color: Pallete.backgroundColor
+                                      .withOpacity(backgroundOpacity),
+                                ),
+                              ],
                             ),
                           ],
                         ),
@@ -152,123 +238,14 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                 ),
                                 ListView.builder(
                                   padding: EdgeInsets.zero,
-                                  physics:
-                                      const NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
                                   itemCount: trendingMovies.length,
                                   itemBuilder: (context, position) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(bottom: 20),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Colors.white,
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        height: size.width * 0.6,
-                                        child: Stack(
-                                          children: [
-                                            SizedBox(
-                                              height: size.width * 0.6,
-                                              width: size.width * 0.9,
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    height: size.width * 0.6,
-                                                    width: size.width * 0.86,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius
-                                                              .circular(10),
-                                                      image: DecorationImage(
-                                                        image:
-                                                            CachedNetworkImageProvider(
-                                                          "$tmdbImageURL/${trendingMovies[position].backdropPath}",
-                                                        ),
-                                                        fit: BoxFit.cover,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Positioned(
-                                              bottom: 0,
-                                              left: 0,
-                                              child: SizedBox(
-                                                height: size.width * 0.14,
-                                                width: size.width * 0.86,
-                                                child: Stack(
-                                                  children: [
-                                                    Container(
-                                                      height:
-                                                          size.width * 0.14,
-                                                      width:
-                                                          size.width * 0.86,
-                                                      decoration:
-                                                          BoxDecoration(
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .only(
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10),
-                                                        ),
-                                                        color: Pallete
-                                                            .backgroundColor
-                                                            .withOpacity(0.8),
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding: const EdgeInsets.only(
-                                                          left: 10,
-                                                          right: 10,
-                                                          top: 15,
-                                                          bottom: 5
-                                                      ),
-                                                      child: Row(
-                                                        children: [
-                                                          Expanded(
-                                                            flex: 1,
-                                                            child: Text(
-                                                              '${trendingMovies[
-                                                                      position]
-                                                                  .title!} (${trendingMovies[
-                                                                          position]
-                                                                      .releaseDate!.substring(0,4)})',
-                                                              style: Theme.of(
-                                                                      context)
-                                                                  .textTheme
-                                                                  .bodyLarge,
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            '${trendingMovies[position].voteAverage!} ⭐',
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodyLarge!.copyWith(
-                                                                    color: Pallete
-                                                                        .greenColor),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
+                                    return MoviePreviewComponent(
+                                        size: size,
+                                        trendingMovies: trendingMovies,
+                                        index: position);
                                   },
                                 ),
                               ],

@@ -8,7 +8,7 @@ class AppTheme {
     textTheme: const TextTheme(
       titleLarge: TextStyle(
         color: Pallete.whiteColor,
-        fontSize: 28,
+        fontSize: 26,
         fontWeight: FontWeight.normal,
       ),
       titleMedium: TextStyle(
