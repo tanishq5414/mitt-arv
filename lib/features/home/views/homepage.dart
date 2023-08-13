@@ -45,20 +45,20 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        // appBar: AppBar(
-        //   centerTitle: true,
-        //   actions: [
-        //     IconButton(
-        //       onPressed: () {
-        //         Navigator.push(
-        //           context,
-        //           SearchPageView.route(),
-        //         );
-        //       },
-        //       icon: const Icon(Icons.search),
-        //     ),
-        //   ],
-        // ),
+        appBar: AppBar(
+          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  SearchPageView.route(),
+                );
+              },
+              icon: const Icon(Icons.search),
+            ),
+          ],
+        ),
         body: LazyLoadScrollView(
           isLoading: isLoading, // Set the loading indicator state here
           onEndOfPage: () => _loadMore(),
@@ -90,13 +90,18 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                     return Container(
                       height: 300,
                       width: MediaQuery.of(context).size.width,
-                      child: Card(
+                      child: Container(
                         child: Column(
                           children: [
                             Container(
                               height: 200,
                               width: 150,
                               decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.blueGrey,
+                                  width: 2,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
                                 image: DecorationImage(
                                   image: NetworkImage(
                                     "$tmdbImageURL/${trendingMovies[position].posterPath}",
@@ -105,33 +110,14 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                 ),
                               ),
                             ),
-                            Expanded(
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 150,
-                                      child: Text(
-                                        trendingMovies[position].title!,
-                                        maxLines: 3,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    // Text(
-                                    //   trendingMovies[position].overview!,
-                                    //   maxLines: 5,
-                                    //   overflow: TextOverflow.ellipsis,
-                                    // ),
-                                  ],
-                                ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              trendingMovies[position].title!,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
