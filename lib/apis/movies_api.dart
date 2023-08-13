@@ -3,6 +3,7 @@ import 'package:fpdart/fpdart.dart';
 import 'package:mittarv/config.dart';
 import 'package:mittarv/core/failure.dart';
 import 'package:mittarv/core/type_defs.dart';
+import 'package:mittarv/model/genre_model.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -16,6 +17,7 @@ final moviesApiProvider = Provider((ref) {
 abstract class IMoviesApi {
   FutureEither<List<MoviesModel>> getTopRatedMovies({required page});
   FutureEither<List<MoviesModel>> searchMoviesByQuery({required query});
+  FutureEither<List<GenreModel>> getGenreList();
 }
 
 class MoviesApi implements IMoviesApi {
@@ -34,8 +36,9 @@ class MoviesApi implements IMoviesApi {
       return left(Failure(e.toString(), st));
     }
   }
+
   @override
-  FutureEither<List<MoviesModel>> searchMoviesByQuery({required query})async{
+  FutureEither<List<MoviesModel>> searchMoviesByQuery({required query}) async {
     try {
       dio.options.headers['Authorization'] = tmdbacessToken;
       dio.options.queryParameters['query'] = query;
@@ -44,6 +47,21 @@ class MoviesApi implements IMoviesApi {
       final List<MoviesModel> movies = [];
       data.data['results'].forEach((element) {
         movies.add(MoviesModel.fromJson(element));
+      });
+      return right(movies);
+    } catch (e, st) {
+      return left(Failure(e.toString(), st));
+    }
+  }
+
+  @override
+  FutureEither<List<GenreModel>> getGenreList() async {
+    try {
+      dio.options.headers['Authorization'] = tmdbacessToken;
+      final data = await dio.get('$tmdbAPIURL/genre/movie/list');
+      final List<GenreModel> movies = [];
+      data.data['genres'].forEach((element) {
+        movies.add(GenreModel.fromJson(element));
       });
       return right(movies);
     } catch (e, st) {

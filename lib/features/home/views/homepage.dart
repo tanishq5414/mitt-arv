@@ -29,6 +29,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
     _scrollController.addListener(() {
       _scrollListener();
     });
+    ref.read(movieControllerProvider.notifier).getGenreList(context: context);
     _loadMore();
   }
 
@@ -61,6 +62,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    var genreList = ref.watch(genreListProvider);
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -144,67 +146,70 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                             ),
                             Stack(
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Rating: ',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
-                                            ),
-                                            Text(
-                                              '${trendingMovies[12].voteAverage} ⭐',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge!
-                                                  .copyWith(
-                                                    color: Color.fromARGB(
-                                                        255, 215, 202, 202),
-                                                  ),
-                                            ),
-                                          ],
-                                        ),
-                                        Text(
-                                          '${trendingMovies[12].genreIds![0]}',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge!
-                                              .copyWith(
-                                                color: Color.fromARGB(
-                                                    255, 215, 202, 202),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                'Rating: ',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge,
                                               ),
-                                        ),
-                                      ],
-                                    ),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Pallete.whiteColor,
+                                              Text(
+                                                '${trendingMovies[12].voteAverage} ⭐',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge!
+                                                    .copyWith(
+                                                      color: const Color.fromARGB(
+                                                          255, 215, 202, 202),
+                                                    ),
+                                              ),
+                                            ],
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 30, vertical: 10),
-                                          child: Text('Details',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge),
+                                          Text(
+                                            '${genreList?.firstWhere((element) => element.id == trendingMovies[12].genreIds![0]).name}',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyLarge!
+                                                .copyWith(
+                                                  color: const Color.fromARGB(
+                                                      255, 215, 202, 202),
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: Pallete.whiteColor,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(30),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 30, vertical: 10),
+                                            child: Text('Details',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                                 Container(
                                   height: size.height * 0.2,
