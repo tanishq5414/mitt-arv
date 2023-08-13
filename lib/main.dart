@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mittarv/features/home/views/homepage.dart';
+import 'package:mittarv/features/home/components/bottomnavbar_component.dart';
 import 'package:mittarv/theme/app_theme.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'MittaRV',
       theme: AppTheme.theme,
-      home: const HomePageView(),
+      home: const BottomNavBarView(),
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:mittarv/config.dart';
 import 'package:mittarv/core/failure.dart';
@@ -18,6 +20,7 @@ abstract class IMoviesApi {
   FutureEither<List<MoviesModel>> getTopRatedMovies({required page});
   FutureEither<List<MoviesModel>> searchMoviesByQuery({required query});
   FutureEither<List<GenreModel>> getGenreList();
+  FutureEither<ImageProvider> loadImage(String imagePath);
 }
 
 class MoviesApi implements IMoviesApi {
@@ -64,6 +67,18 @@ class MoviesApi implements IMoviesApi {
         movies.add(GenreModel.fromJson(element));
       });
       return right(movies);
+    } catch (e, st) {
+      return left(Failure(e.toString(), st));
+    }
+  }
+
+  @override
+  FutureEither<ImageProvider> loadImage(String imagePath) async {
+    try {
+      final data =
+          await NetworkAssetBundle(Uri.parse('$tmdbImageURL$imagePath'))
+              .load('');
+      return right(MemoryImage(data.buffer.asUint8List()));
     } catch (e, st) {
       return left(Failure(e.toString(), st));
     }

@@ -142,6 +142,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.2"
+  flutter_octicons:
+    dependency: "direct main"
+    description:
+      name: flutter_octicons
+      sha256: "41110443300cb2fe7eab7c907d2ff0764d346224545e1180a06a53186ce32be3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.39.0"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -243,6 +251,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.2"
+  palette_generator:
+    dependency: "direct main"
+    description:
+      name: palette_generator
+      sha256: "0e3cd6974e10b1434dcf4cf779efddb80e2696585e273a2dbede6af52f94568d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.3+2"
   path:
     dependency: transitive
     description:

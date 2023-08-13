@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class ExtendedBlackScreenTransitionsBuilder extends PageTransitionsBuilder {
   final Duration blackScreenDuration;
 
-  ExtendedBlackScreenTransitionsBuilder({this.blackScreenDuration = const Duration(milliseconds: 2000)});
+  ExtendedBlackScreenTransitionsBuilder(
+      {this.blackScreenDuration = const Duration(milliseconds: 2000)});
 
   @override
   Widget buildTransitions<T>(
@@ -40,13 +41,15 @@ class DelayedBlackScreen extends StatefulWidget {
   final Duration duration;
   final Widget child;
 
-  const DelayedBlackScreen({super.key, required this.duration, required this.child});
+  const DelayedBlackScreen({Key? key, required this.duration, required this.child})
+      : super(key: key);
 
   @override
-  _DelayedBlackScreenState createState() => _DelayedBlackScreenState();
+  DelayedBlackScreenState createState() => DelayedBlackScreenState();
 }
 
-class _DelayedBlackScreenState extends State<DelayedBlackScreen> with SingleTickerProviderStateMixin {
+class DelayedBlackScreenState extends State<DelayedBlackScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
@@ -55,7 +58,8 @@ class _DelayedBlackScreenState extends State<DelayedBlackScreen> with SingleTick
     _controller = AnimationController(duration: widget.duration, vsync: this)
       ..addStatusListener((status) {
         if (status == AnimationStatus.completed) {
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => widget.child));
+          Navigator.of(context)
+              .pushReplacement(MaterialPageRoute(builder: (_) => widget.child));
         }
       })
       ..forward();

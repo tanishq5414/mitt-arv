@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mittarv/common/movie_preview_component.dart';
 import 'package:mittarv/features/movies/controllers/moviecontroller.dart';
 import 'package:mittarv/model/movies_model.dart';
+import 'package:mittarv/theme/pallete.dart';
 
 class SearchPageView extends ConsumerStatefulWidget {
   static Route route() {
@@ -36,6 +38,7 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
     final newMovies = ref.read(searchMoviesProvider) ?? [];
     setState(() {
       _searchResults = newMovies;
+      _searchResults.removeWhere((element) => element.backdropPath == null);
       _isLoading = false;
     });
   }
@@ -53,37 +56,51 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Search'),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _searchController,
-              onChanged: _onSearchTextChanged,
-              decoration: const InputDecoration(
-                hintText: 'Search...',
+    var size = MediaQuery.of(context).size;
+    return SafeArea(
+      child: Scaffold(
+        appBar: AppBar(),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                textAlign: TextAlign.right,
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      color: Pallete.whiteColor,
+                    ),
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+                        color: Pallete.whiteColor,
+                      ),
+                  hintText: 'Search...',
+                  border: InputBorder.none,
+                ),
+                onChanged: _onSearchTextChanged,
               ),
             ),
-          ),
-          (_isLoading)?
-          const Center(child: CircularProgressIndicator()):
-          Expanded(
-            child: ListView.builder(
-              itemCount: _searchResults.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(_searchResults[index].title!),
-                  // You can customize the list item's appearance here
-                );
-              },
-            ),
-          ),
-        ],
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: _searchResults.length,
+                        itemBuilder: (context, index) {
+                          return MoviePreviewComponent(
+                            size: size,
+                            trendingMovies: _searchResults,
+                            index: index,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+          ],
+        ),
       ),
     );
   }

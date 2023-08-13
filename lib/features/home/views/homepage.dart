@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +10,7 @@ import 'package:mittarv/features/movies/controllers/moviecontroller.dart';
 import 'package:mittarv/features/search/searchpage.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:mittarv/theme/pallete.dart';
+import 'package:palette_generator/palette_generator.dart';
 
 class HomePageView extends ConsumerStatefulWidget {
   const HomePageView({Key? key}) : super(key: key);
@@ -23,6 +26,11 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   num _scrollPosition = 0;
   double backgroundOpacity = 0;
   bool isLoading = false;
+  //generate random number for bannerIndex
+  final int bannerIndex = Random().nextInt(10);
+  Color _iconColor = Colors.white;
+  late PaletteGenerator _paletteGenerator;
+
   @override
   void initState() {
     super.initState();
@@ -54,8 +62,34 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       final newMovies = ref.read(trendingMoviesProvider) ?? [];
       setState(() {
         trendingMovies.addAll(newMovies);
+        trendingMovies.removeWhere((element) => element.backdropPath == null);
+        trendingMovies.removeWhere((element) => element.posterPath == null);
+        trendingMovies.removeWhere((element) => element.title == null);
+        _generatePalette();
+
         isLoading = false;
       });
+    }
+  }
+
+  Future<void> _generatePalette() async {
+    final imageProvider = NetworkImage(
+      "$tmdbImageURL/${trendingMovies[bannerIndex].posterPath}",
+    );
+    _paletteGenerator = await PaletteGenerator.fromImageProvider(imageProvider);
+    _decideTextColor();
+    setState(() {});
+  }
+
+  void _decideTextColor() {
+    final dominantColor = _paletteGenerator.dominantColor!.color;
+    // Calculate luminance of dominant color
+    final luminance = dominantColor.computeLuminance();
+    // Decide text color based on luminance
+    if (luminance < 0.5) {
+      _iconColor = Colors.white;
+    } else {
+      _iconColor = Colors.black;
     }
   }
 
@@ -74,12 +108,12 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
             Container(
               margin: const EdgeInsets.only(right: 20),
               decoration: BoxDecoration(
-                color: Pallete.whiteColor.withOpacity(0.5),
+                color: _iconColor.withOpacity(0.5),
                 shape: BoxShape.circle,
               ),
               child: IconButton(
                 style: IconButton.styleFrom(
-                  backgroundColor: Pallete.backgroundColor,
+                  backgroundColor: _iconColor,
                   shape: const CircleBorder(),
                 ),
                 onPressed: () {
@@ -107,19 +141,19 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                             Stack(
                               children: [
                                 Container(
-                                  height: size.height * 0.7,
+                                  height: size.height * 0.65,
                                   width: size.width,
                                   decoration: BoxDecoration(
                                     image: DecorationImage(
                                       image: CachedNetworkImageProvider(
-                                        "$tmdbImageURL/${trendingMovies[12].posterPath}",
+                                        "$tmdbImageURL/${trendingMovies[bannerIndex].posterPath}",
                                       ),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
                                 Container(
-                                  height: size.height * 0.7,
+                                  height: size.height * 0.65,
                                   width: size.width,
                                   decoration: const BoxDecoration(
                                     gradient: LinearGradient(
@@ -137,7 +171,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                   ),
                                 ),
                                 Container(
-                                  height: size.height * 0.7,
+                                  height: size.height * 0.65,
                                   width: size.width,
                                   color: Pallete.backgroundColor
                                       .withOpacity(backgroundOpacity),
@@ -147,7 +181,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                             Stack(
                               children: [
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 25),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -165,19 +200,23 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                                     .bodyLarge,
                                               ),
                                               Text(
-                                                '${trendingMovies[12].voteAverage} ⭐',
+                                                '${trendingMovies[bannerIndex].voteAverage} ⭐',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyLarge!
                                                     .copyWith(
-                                                      color: const Color.fromARGB(
-                                                          255, 215, 202, 202),
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              215,
+                                                              202,
+                                                              202),
                                                     ),
                                               ),
                                             ],
                                           ),
                                           Text(
-                                            '${genreList?.firstWhere((element) => element.id == trendingMovies[12].genreIds![0]).name}',
+                                            '${genreList?.firstWhere((element) => element.id == trendingMovies[bannerIndex].genreIds![0]).name}',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyLarge!
@@ -229,7 +268,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                             child: Column(
                               children: [
                                 SizedBox(
-                                  height: size.height * 0.8,
+                                  height: size.height * 0.75,
                                 ),
                                 Align(
                                   alignment: Alignment.centerLeft,

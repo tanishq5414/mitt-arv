@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:mittarv/apis/movies_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/core/core.dart';
@@ -46,6 +47,16 @@ class MovieControllerNotifier extends StateNotifier<bool> {
     final res = await _moviesApi.getGenreList();
     res.fold((l) => showSnackBar(context, l.message), (r) {
       _ref.read(genreListProvider.notifier).update((state) => r);
+    });
+  }
+
+  Future<ImageProvider<Object>> loadImage({required context, required imagePath}) async {
+    final res = await _moviesApi.loadImage(imagePath);
+    return res.fold((l) {
+      showSnackBar(context, l.message);
+      return Image.asset('assets/images/placeholder.png').image;
+    }, (r) {
+      return r;
     });
   }
 }

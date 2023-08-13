@@ -103,7 +103,7 @@ class MoviePreviewComponent extends StatelessWidget {
                                       index]
                                   .title!} (${trendingMovies[
                                           index]
-                                      .releaseDate!.substring(0,4)})',
+                                      .releaseDate??''.substring(0,4)})',
                               style: Theme.of(
                                       context)
                                   .textTheme
@@ -111,7 +111,7 @@ class MoviePreviewComponent extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${trendingMovies[index].voteAverage!} ⭐',
+                            '${trendingMovies[index].voteAverage!.toString().substring(0,3)} ⭐',
                             style: Theme.of(
                                     context)
                                 .textTheme
