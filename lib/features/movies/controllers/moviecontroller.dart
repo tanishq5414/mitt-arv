@@ -31,29 +31,30 @@ class MovieControllerNotifier extends StateNotifier<bool> {
   Future<void> getTopRatedMovies({required context, required page}) async {
     Future.delayed(const Duration(seconds: 10));
     final res = await _moviesApi.getTopRatedMovies(page: page);
-    res.fold((l) => showSnackBar(context, l.message), (r) {
+    res.fold((l) => null, (r) {
       _ref.read(trendingMoviesProvider.notifier).update((state) => r);
     });
   }
 
   Future<void> searchMoviesByQuery({required context, required query}) async {
     final res = await _moviesApi.searchMoviesByQuery(query: query);
-    res.fold((l) => showSnackBar(context, l.message), (r) {
+    res.fold((l) => null, (r) {
       _ref.read(searchMoviesProvider.notifier).update((state) => r);
     });
   }
 
   Future<void> getGenreList({required context}) async {
     final res = await _moviesApi.getGenreList();
-    res.fold((l) => showSnackBar(context, l.message), (r) {
+    res.fold((l) => null, (r) {
       _ref.read(genreListProvider.notifier).update((state) => r);
     });
   }
 
-  Future<ImageProvider<Object>> loadImage({required context, required imagePath}) async {
+  Future<ImageProvider<Object>> loadImage(
+      {required context, required imagePath}) async {
     final res = await _moviesApi.loadImage(imagePath);
     return res.fold((l) {
-      showSnackBar(context, l.message);
+      null;
       return Image.asset('assets/images/placeholder.png').image;
     }, (r) {
       return r;

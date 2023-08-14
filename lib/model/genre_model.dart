@@ -1,5 +1,5 @@
 class GenreModel {
-  int? id;
+  num? id;
   String? name;
 
   GenreModel({this.id, this.name});

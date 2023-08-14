@@ -65,6 +65,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
         trendingMovies.removeWhere((element) => element.backdropPath == null);
         trendingMovies.removeWhere((element) => element.posterPath == null);
         trendingMovies.removeWhere((element) => element.title == null);
+        trendingMovies.removeWhere(
+            (element) => element.genreIds == null || element.genreIds!.isEmpty);
         _generatePalette();
 
         isLoading = false;
@@ -129,139 +131,137 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
         ),
         body: Stack(
           children: [
-            LazyLoadScrollView(
-              isLoading: isLoading, // Set the loading indicator state here
-              onEndOfPage: () => _loadMore(),
-              child: (trendingMovies.isEmpty)
-                  ? const Center(child: CircularProgressIndicator())
-                  : Stack(
-                      children: [
-                        Column(
-                          children: [
-                            Stack(
-                              children: [
-                                Container(
-                                  height: size.height * 0.65,
-                                  width: size.width,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: CachedNetworkImageProvider(
-                                        "$tmdbImageURL/${trendingMovies[bannerIndex].posterPath}",
-                                      ),
-                                      fit: BoxFit.cover,
+            (trendingMovies.isEmpty)
+                ? const Center(child: CircularProgressIndicator())
+                : Stack(
+                    children: [
+                      Column(
+                        children: [
+                          Stack(
+                            children: [
+                              Container(
+                                height: size.height * 0.65,
+                                width: size.width,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: CachedNetworkImageProvider(
+                                      "$tmdbImageURL/${trendingMovies[bannerIndex].posterPath}",
                                     ),
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-                                Container(
-                                  height: size.height * 0.65,
-                                  width: size.width,
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Colors.transparent,
-                                        Colors.transparent,
-                                        Colors.transparent,
-                                        Colors.transparent,
-                                        Colors.transparent,
-                                        Pallete.backgroundColor,
-                                      ],
-                                      begin: Alignment.topCenter,
-                                      end: Alignment.bottomCenter,
-                                    ),
+                              ),
+                              Container(
+                                height: size.height * 0.65,
+                                width: size.width,
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.transparent,
+                                      Colors.transparent,
+                                      Colors.transparent,
+                                      Colors.transparent,
+                                      Colors.transparent,
+                                      Pallete.backgroundColor,
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
                                   ),
                                 ),
-                                Container(
-                                  height: size.height * 0.65,
-                                  width: size.width,
-                                  color: Pallete.backgroundColor
-                                      .withOpacity(backgroundOpacity),
-                                ),
-                              ],
-                            ),
-                            Stack(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 25),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'Rating: ',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge,
-                                              ),
-                                              Text(
-                                                '${trendingMovies[bannerIndex].voteAverage} ⭐',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge!
-                                                    .copyWith(
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              215,
-                                                              202,
-                                                              202),
-                                                    ),
-                                              ),
-                                            ],
-                                          ),
-                                          Text(
-                                            '${genreList?.firstWhere((element) => element.id == trendingMovies[bannerIndex].genreIds![0]).name}',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodyLarge!
-                                                .copyWith(
-                                                  color: const Color.fromARGB(
-                                                      255, 215, 202, 202),
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: Pallete.whiteColor,
+                              ),
+                              Container(
+                                height: size.height * 0.65,
+                                width: size.width,
+                                color: Pallete.backgroundColor
+                                    .withOpacity(backgroundOpacity),
+                              ),
+                            ],
+                          ),
+                          Stack(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 25),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              'Rating: ',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge,
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(30),
+                                            Text(
+                                              '${trendingMovies[bannerIndex].voteAverage} ⭐',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge!
+                                                  .copyWith(
+                                                    color: const Color.fromARGB(
+                                                        255, 215, 202, 202),
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          '${genreList?.firstWhere((element) => element.id == trendingMovies[bannerIndex].genreIds?[0]).name}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyLarge!
+                                              .copyWith(
+                                                color: const Color.fromARGB(
+                                                    255, 215, 202, 202),
+                                              ),
+                                        ),
+                                      ],
+                                    ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: Pallete.whiteColor,
                                           ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 30, vertical: 10),
-                                            child: Text('Details',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodyLarge),
-                                          ),
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 30, vertical: 10),
+                                          child: Text('Details',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyLarge),
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                                Container(
-                                  height: size.height * 0.2,
-                                  width: size.width,
-                                  color: Pallete.backgroundColor
-                                      .withOpacity(backgroundOpacity),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                              ),
+                              Container(
+                                height: size.height * 0.2,
+                                width: size.width,
+                                color: Pallete.backgroundColor
+                                    .withOpacity(backgroundOpacity),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: LazyLoadScrollView(
+                          scrollOffset: 500,
+                          isLoading:
+                              isLoading, // Set the loading indicator state here
+                          onEndOfPage: () => _loadMore(),
                           child: SingleChildScrollView(
                             controller: _scrollController,
                             physics: const BouncingScrollPhysics(),
@@ -288,19 +288,40 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                   itemBuilder: (context, position) {
                                     return MoviePreviewComponent(
                                         size: size,
-                                        trendingMovies: trendingMovies,
-                                        index: position);
+                                        movie: trendingMovies[position]);
                                   },
                                 ),
+                                if (isLoading)
+                                  const Center(
+                                      child: CircularProgressIndicator(
+                                    color: Pallete.whiteColor,
+                                  )),
                               ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
-            ),
+                      ),
+                    ],
+                  ),
           ],
         ),
+        floatingActionButton: (_scrollPosition > 500)?Container(
+          margin: EdgeInsets.only(bottom: size.height * 0.06),
+          child: FloatingActionButton(
+            backgroundColor: Pallete.greyColor,
+            child: const Icon(
+              Icons.arrow_upward,
+              color: Pallete.whiteColor,
+            ),
+            onPressed: (){
+              _scrollController.animateTo(
+                0,
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+              );
+            },
+          ),
+        ): null,
       ),
     );
   }

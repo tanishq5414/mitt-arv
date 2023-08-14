@@ -8,27 +8,23 @@ class MoviePreviewComponent extends StatelessWidget {
   const MoviePreviewComponent({
     super.key,
     required this.size,
-    required this.trendingMovies,
-    required this.index,
+    required this.movie,
   });
 
   final Size size;
-  final int index;
-  final List<MoviesModel> trendingMovies;
+  final MoviesModel movie;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-          const EdgeInsets.only(bottom: 20),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
             color: Colors.grey,
             width: 1,
           ),
-          borderRadius:
-              BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10),
         ),
         height: size.width * 0.6,
         child: Stack(
@@ -42,13 +38,10 @@ class MoviePreviewComponent extends StatelessWidget {
                     height: size.width * 0.6,
                     width: size.width * 0.86,
                     decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius
-                              .circular(10),
+                      borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
-                        image:
-                            CachedNetworkImageProvider(
-                          "$tmdbImageURL/${trendingMovies[index].backdropPath}",
+                        image: CachedNetworkImageProvider(
+                          "$tmdbImageURL/${movie.backdropPath}",
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -66,58 +59,34 @@ class MoviePreviewComponent extends StatelessWidget {
                 child: Stack(
                   children: [
                     Container(
-                      height:
-                          size.width * 0.14,
-                      width:
-                          size.width * 0.86,
-                      decoration:
-                          BoxDecoration(
-                        borderRadius:
-                            const BorderRadius
-                                .only(
-                          bottomLeft:
-                              Radius.circular(
-                                  10),
-                          bottomRight:
-                              Radius.circular(
-                                  10),
+                      height: size.width * 0.14,
+                      width: size.width * 0.86,
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10),
                         ),
-                        color: Pallete
-                            .backgroundColor
-                            .withOpacity(0.8),
+                        color: Pallete.backgroundColor.withOpacity(0.8),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                          left: 10,
-                          right: 10,
-                          top: 15,
-                          bottom: 5
-                      ),
+                          left: 10, right: 10, top: 15, bottom: 5),
                       child: Row(
                         children: [
                           Expanded(
                             flex: 1,
                             child: Text(
-                              '${trendingMovies[
-                                      index]
-                                  .title!} (${trendingMovies[
-                                          index]
-                                      .releaseDate??''.substring(0,4)})',
-                              style: Theme.of(
-                                      context)
-                                  .textTheme
-                                  .bodyLarge,
+                              '${movie.title} (${(movie.releaseDate != null) ? movie.releaseDate!.toString().substring(0, 4) : ""})',
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
                           Text(
-                            '${trendingMovies[index].voteAverage!.toString().substring(0,3)} ⭐',
-                            style: Theme.of(
-                                    context)
+                            '${movie.voteAverage.toString()} ⭐',
+                            style: Theme.of(context)
                                 .textTheme
-                                .bodyLarge!.copyWith(
-                                    color: Pallete
-                                        .greenColor),
+                                .bodyLarge!
+                                .copyWith(color: Pallete.greenColor),
                           ),
                         ],
                       ),

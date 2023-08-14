@@ -67,6 +67,7 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
+                  autofocus: true,
                   textAlign: TextAlign.right,
                   style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Pallete.whiteColor,
@@ -101,8 +102,7 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
                         itemBuilder: (context, index) {
                           return MoviePreviewComponent(
                             size: size,
-                            trendingMovies: _searchResults,
-                            index: index,
+                            movie: _searchResults[index],
                           );
                         },
                       ),
