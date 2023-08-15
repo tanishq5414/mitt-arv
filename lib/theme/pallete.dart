@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Pallete {
-  static const Color backgroundColor = Color(0xff0A0B0B);
+  static const Color backgroundColor = Color(0xff15191D);
   static const Color greyColor = Color(0xff292929);
   static const Color lightGreyColor = Color(0xffD3D3D3);
   static const Color darkGreyColor = Color(0xffb2b2b2);
   static const Color whiteColor = Colors.white;
   static const Color blackColor = Colors.black;
+  static const Color orangeColor = Color(0xffFF8000);
+  static const Color otherBlueColor = Color(0xff485461);
   static const Color redColor = Color(0xffB72D2D);
   static const Color deepRedColor = Color(0xff731515);
   static const Color blueColor = Color(0xff088395);
-  static const Color deepBlueColor = Color(0xff0A4D68);
+  static const Color deepBlueColor = Color.fromARGB(255, 5, 36, 49);
   static const Color brownColor = Color(0xffA4907C);
   static const Color deepBrownColor = Color(0xff8D7B68);
   static const Color violetColor = Color(0xffA685E2);

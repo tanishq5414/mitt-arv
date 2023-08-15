@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mittarv/apis/movies_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mittarv/core/core.dart';
 import 'package:mittarv/model/genre_model.dart';
 import 'package:mittarv/model/movies_model.dart';
 

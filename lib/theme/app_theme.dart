@@ -9,7 +9,7 @@ class AppTheme {
       titleLarge: TextStyle(
         color: Pallete.whiteColor,
         fontSize: 26,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.w700,
       ),
       titleMedium: TextStyle(
         color: Pallete.whiteColor,
@@ -42,7 +42,7 @@ class AppTheme {
       TargetPlatform.iOS: const ZoomPageTransitionsBuilder(),
     }),
     splashFactory: NoSplash.splashFactory,
-    fontFamily: 'HevleticaNowDisplay',
+    fontFamily: 'SFPro',
     highlightColor: Colors.transparent,
     splashColor: Colors.transparent,
     hoverColor: Colors.transparent,

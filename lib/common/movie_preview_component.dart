@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:mittarv/config.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:mittarv/theme/pallete.dart';
@@ -20,28 +21,33 @@ class MoviePreviewComponent extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.grey,
-            width: 1,
-          ),
+          // border: Border.all(
+          //   color: Pallete.whiteColor.withOpacity(0.2),
+          // ),
           borderRadius: BorderRadius.circular(10),
         ),
         height: size.width * 0.6,
-        child: Stack(
+        width: size.width * 0.4,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
               height: size.width * 0.6,
-              width: size.width * 0.9,
+              width: size.width * 0.4,
               child: Row(
                 children: [
                   Container(
                     height: size.width * 0.6,
-                    width: size.width * 0.86,
+                    width: size.width * 0.4,
                     decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Pallete.whiteColor.withOpacity(0.2),
+                        width: 2.5,
+                      ),
                       borderRadius: BorderRadius.circular(10),
                       image: DecorationImage(
                         image: CachedNetworkImageProvider(
-                          "$tmdbImageURL/${movie.backdropPath}",
+                          "$tmdbImageURL/${movie.posterPath}",
                         ),
                         fit: BoxFit.cover,
                       ),
@@ -50,49 +56,36 @@ class MoviePreviewComponent extends StatelessWidget {
                 ],
               ),
             ),
-            Positioned(
-              bottom: 0,
-              left: 0,
-              child: SizedBox(
-                height: size.width * 0.14,
-                width: size.width * 0.86,
-                child: Stack(
-                  children: [
-                    Container(
-                      height: size.width * 0.14,
-                      width: size.width * 0.86,
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
+            const SizedBox(height: 2),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    '(${(movie.releaseDate != null) ? movie.releaseDate!.toString().substring(0, 4) : ""})',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Pallete.lightGreyColor,
+                          fontWeight: FontWeight.w700,
                         ),
-                        color: Pallete.backgroundColor.withOpacity(0.8),
-                      ),
+                  ),
+                  const Spacer(),
+                  RatingBar.builder(
+                    onRatingUpdate: (v) {},
+                    ignoreGestures: true,
+                    initialRating: (movie.voteAverage??1/2).toDouble(),
+                    direction: Axis.horizontal,
+                    itemSize: 15,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.zero,
+                    itemBuilder: (context, _) => const Icon(
+                      size: 10,
+                      Icons.star,
+                      color: Pallete.lightGreyColor,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 10, right: 10, top: 15, bottom: 5),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: Text(
-                              '${movie.title} (${(movie.releaseDate != null) ? movie.releaseDate!.toString().substring(0, 4) : ""})',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
-                          ),
-                          Text(
-                            '${movie.voteAverage.toString()} ⭐',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyLarge!
-                                .copyWith(color: Pallete.greenColor),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

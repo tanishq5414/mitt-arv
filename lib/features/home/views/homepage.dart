@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:mittarv/common/movie_preview_component.dart';
@@ -43,7 +44,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
 
   void _scrollListener() {
     _scrollPosition = _scrollController.position.pixels;
-    double opacity = _scrollPosition / 600;
+    double opacity = _scrollPosition / 300;
     opacity = opacity.clamp(0, 1);
     setState(() {
       backgroundOpacity = opacity;
@@ -89,7 +90,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
     final luminance = dominantColor.computeLuminance();
     // Decide text color based on luminance
     if (luminance < 0.5) {
-      _iconColor = Colors.white;
+      _iconColor = const Color(0xffD8E0E8);
     } else {
       _iconColor = Colors.black;
     }
@@ -103,28 +104,77 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
-          toolbarHeight: 80,
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
+          title: Container(
+            margin: const EdgeInsets.only(left: 20),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 55,
+                  child: Stack(
+                  children: [
+                    Container(
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Pallete.blueColor,
+                      ),
+                      height: 20,
+                      width: 18,
+                    ),
+                    Positioned(
+                      left: 16,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Pallete.orangeColor,
+                        ),
+                        height: 20,
+                        width: 18,
+                      ),
+                    ),
+                    Positioned(
+                      left: 16*2,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Pallete.greenColor,
+                        ),
+                        height: 20,
+                        width: 18,
+                      ),
+                    ),
+                  ],
+                              ),
+                ),
+                Text('Postalboxed', style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                )),
+              ],
+            ),
+          ),
+          backgroundColor: (_scrollPosition<100)?Pallete.deepBlueColor.withOpacity(0.1):Pallete.deepBlueColor,
           actions: [
+            IconButton(
+              iconSize: 30,
+              style: IconButton.styleFrom(
+                backgroundColor: _iconColor,
+                shape: const CircleBorder(),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  SearchPageView.route(),
+                );
+              },
+              icon: const Icon(Icons.search),
+            ),
+            const SizedBox(width: 10),
             Container(
               margin: const EdgeInsets.only(right: 20),
-              decoration: BoxDecoration(
-                color: _iconColor.withOpacity(0.5),
-                shape: BoxShape.circle,
-              ),
-              child: IconButton(
-                style: IconButton.styleFrom(
-                  backgroundColor: _iconColor,
-                  shape: const CircleBorder(),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    SearchPageView.route(),
-                  );
-                },
-                icon: const Icon(Icons.search),
+              child: CircleAvatar(
+                radius: 14,
+                backgroundColor: _iconColor,
               ),
             ),
           ],
@@ -140,28 +190,25 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                           Stack(
                             children: [
                               Container(
-                                height: size.height * 0.65,
+                                height: size.height * 0.3,
                                 width: size.width,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: CachedNetworkImageProvider(
-                                      "$tmdbImageURL/${trendingMovies[bannerIndex].posterPath}",
+                                      "$tmdbImageURL/${trendingMovies[bannerIndex].backdropPath}",
                                     ),
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.fitHeight,
                                   ),
                                 ),
                               ),
                               Container(
-                                height: size.height * 0.65,
+                                height: size.height * 0.3,
                                 width: size.width,
-                                decoration: const BoxDecoration(
+                                decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
                                       Colors.transparent,
-                                      Colors.transparent,
-                                      Colors.transparent,
-                                      Colors.transparent,
-                                      Colors.transparent,
+                                      Pallete.backgroundColor.withOpacity(0.5),
                                       Pallete.backgroundColor,
                                     ],
                                     begin: Alignment.topCenter,
@@ -170,7 +217,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                 ),
                               ),
                               Container(
-                                height: size.height * 0.65,
+                                height: size.height * 0.3,
                                 width: size.width,
                                 color: Pallete.backgroundColor
                                     .withOpacity(backgroundOpacity),
@@ -182,65 +229,57 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 25),
-                                child: Row(
+                                child: Column(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Text(
-                                              'Rating: ',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge,
-                                            ),
-                                            Text(
-                                              '${trendingMovies[bannerIndex].voteAverage} ⭐',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge!
-                                                  .copyWith(
-                                                    color: const Color.fromARGB(
-                                                        255, 215, 202, 202),
-                                                  ),
-                                            ),
-                                          ],
+                                        Text(
+                                          '${trendingMovies[bannerIndex].title} ${trendingMovies[bannerIndex].releaseDate != null ? '(${trendingMovies[bannerIndex].releaseDate!.toString().substring(0, 4)})' : ''}',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleSmall!
+                                              .copyWith(
+                                                color: Pallete.whiteColor,
+                                              ),
                                         ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
                                         Text(
                                           '${genreList?.firstWhere((element) => element.id == trendingMovies[bannerIndex].genreIds?[0]).name}',
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyLarge!
                                               .copyWith(
-                                                color: const Color.fromARGB(
-                                                    255, 215, 202, 202),
+                                                color: Pallete.lightGreyColor,
                                               ),
                                         ),
-                                      ],
-                                    ),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
+                                        RatingBar.builder(
+                                          onRatingUpdate: (v) {},
+                                          ignoreGestures: true,
+                                          initialRating:
+                                              (trendingMovies[bannerIndex]
+                                                          .voteAverage! /
+                                                      2)
+                                                  .toDouble(),
+                                          direction: Axis.horizontal,
+                                          itemSize: 15,
+                                          allowHalfRating: true,
+                                          itemCount: 5,
+                                          itemPadding: EdgeInsets.zero,
+                                          itemBuilder: (context, _) => const Icon(
+                                            size: 10,
+                                            Icons.star,
                                             color: Pallete.whiteColor,
                                           ),
-                                          borderRadius:
-                                              BorderRadius.circular(30),
                                         ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 30, vertical: 10),
-                                          child: Text('Details',
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyLarge),
-                                        ),
-                                      ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -268,19 +307,27 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                             child: Column(
                               children: [
                                 SizedBox(
-                                  height: size.height * 0.75,
+                                  height: size.height * 0.4,
                                 ),
                                 Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Text('Top Rated',
+                                  child: Text('Top Rated Films',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .titleLarge),
+                                          .titleMedium!.copyWith(
+                                            fontSize: 22,
+                                          )),
                                 ),
                                 SizedBox(
                                   height: size.height * 0.02,
                                 ),
-                                ListView.builder(
+                                GridView.builder(
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 0.565,
+                                    crossAxisSpacing: 15,
+                                  ),
                                   padding: EdgeInsets.zero,
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
@@ -305,23 +352,25 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                   ),
           ],
         ),
-        floatingActionButton: (_scrollPosition > 500)?Container(
-          margin: EdgeInsets.only(bottom: size.height * 0.06),
-          child: FloatingActionButton(
-            backgroundColor: Pallete.greyColor,
-            child: const Icon(
-              Icons.arrow_upward,
-              color: Pallete.whiteColor,
-            ),
-            onPressed: (){
-              _scrollController.animateTo(
-                0,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              );
-            },
-          ),
-        ): null,
+        floatingActionButton: (_scrollPosition > 500)
+            ? Container(
+                margin: EdgeInsets.only(bottom: size.height * 0.06),
+                child: FloatingActionButton(
+                  backgroundColor: Pallete.greyColor,
+                  child: const Icon(
+                    Icons.arrow_upward,
+                    color: Pallete.whiteColor,
+                  ),
+                  onPressed: () {
+                    _scrollController.animateTo(
+                      0,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                    );
+                  },
+                ),
+              )
+            : null,
       ),
     );
   }

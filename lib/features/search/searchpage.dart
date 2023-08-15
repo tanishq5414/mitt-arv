@@ -64,39 +64,52 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextField(
-                  autofocus: true,
-                  textAlign: TextAlign.right,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Pallete.whiteColor,
-                      ),
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintStyle: Theme.of(context).textTheme.titleLarge!.copyWith(
+              Container(
+                height: 60,
+                width: size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextField(
+                    autofocus: true,
+
+                    textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           color: Pallete.whiteColor,
                         ),
-                    hintText: 'Search For Movies',
-                    focusedBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Pallete.greyColor,
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            color: Pallete.lightGreyColor.withOpacity(0.5),
+                          ),
+                      fillColor: Pallete.otherBlueColor,
+                      filled: true,
+                      hintText: 'FIND A FILM',
+                      enabledBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff909Ea9),
+                        ),
+                      ),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xff909Ea9),
+                        ),
                       ),
                     ),
-                    enabledBorder: const UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Pallete.whiteColor,
-                      ),
-                    ),
+                    onChanged: _onSearchTextChanged,
                   ),
-                  onChanged: _onSearchTextChanged,
                 ),
               ),
+              const SizedBox(height: 30),
               _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : Expanded(
                       flex: 1,
-                      child: ListView.builder(
+                      child: GridView.builder(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 0.574,
+                        ),
                         shrinkWrap: true,
                         itemCount: _searchResults.length,
                         itemBuilder: (context, index) {
