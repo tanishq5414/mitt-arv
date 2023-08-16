@@ -7,6 +7,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:mittarv/common/movie_preview_component.dart';
 import 'package:mittarv/config.dart';
+import 'package:mittarv/features/auth/controller/auth_controller.dart';
+import 'package:mittarv/features/auth/view/signuppage.dart';
 import 'package:mittarv/features/movies/controllers/moviecontroller.dart';
 import 'package:mittarv/features/search/searchpage.dart';
 import 'package:mittarv/model/movies_model.dart';
@@ -100,6 +102,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     var genreList = ref.watch(genreListProvider);
+    var user = ref.watch(userDataProvider);
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -112,48 +115,51 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                 SizedBox(
                   width: 55,
                   child: Stack(
-                  children: [
-                    Container(
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Pallete.blueColor,
-                      ),
-                      height: 20,
-                      width: 18,
-                    ),
-                    Positioned(
-                      left: 16,
-                      child: Container(
+                    children: [
+                      Container(
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Pallete.orangeColor,
+                          color: Pallete.blueColor,
                         ),
                         height: 20,
                         width: 18,
                       ),
-                    ),
-                    Positioned(
-                      left: 16*2,
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Pallete.greenColor,
+                      Positioned(
+                        left: 16,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Pallete.orangeColor,
+                          ),
+                          height: 20,
+                          width: 18,
                         ),
-                        height: 20,
-                        width: 18,
                       ),
-                    ),
-                  ],
-                              ),
+                      Positioned(
+                        left: 16 * 2,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Pallete.greenColor,
+                          ),
+                          height: 20,
+                          width: 18,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                Text('Postalboxed', style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                )),
+                Text('Postalboxd',
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                        )),
               ],
             ),
           ),
-          backgroundColor: (_scrollPosition<100)?Pallete.deepBlueColor.withOpacity(0.0):Pallete.deepBlueColor,
+          backgroundColor: (_scrollPosition < 100)
+              ? Pallete.deepBlueColor.withOpacity(0.0)
+              : Pallete.deepBlueColor,
           actions: [
             IconButton(
               iconSize: 30,
@@ -170,11 +176,62 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
               icon: const Icon(Icons.search),
             ),
             const SizedBox(width: 10),
-            Container(
-              margin: const EdgeInsets.only(right: 20),
-              child: CircleAvatar(
-                radius: 14,
-                backgroundColor: _iconColor,
+            GestureDetector(
+              onTap: () {
+                if (user == null) {
+                  Navigator.push(
+                    context,
+                    SignUpPageView.route(),
+                  );
+                } else {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        backgroundColor: Pallete.backgroundColor,
+                        title: Text('Logout',
+                            style: Theme.of(context).textTheme.titleMedium!),
+                        content: Text('Are you sure you want to log out?',
+                            style: Theme.of(context).textTheme.bodyMedium!),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              ref
+                                  .read(authControllerProvider.notifier)
+                                  .logout(
+                                    context: context,
+                                  );
+                            },
+                            child: const Text('Logout'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+              },
+              child: Container(
+                margin: const EdgeInsets.only(right: 20),
+                child: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: (user!=null)?Pallete.deepPurpleColor: Pallete.lightGreyColor,
+                  child: (user != null)
+                      ? Text(
+                          user.email!.substring(0, 1).toUpperCase(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(fontSize: 16),
+                        )
+                      : null,
+                ),
               ),
             ),
           ],
@@ -274,7 +331,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                           allowHalfRating: true,
                                           itemCount: 5,
                                           itemPadding: EdgeInsets.zero,
-                                          itemBuilder: (context, _) => const Icon(
+                                          itemBuilder: (context, _) =>
+                                              const Icon(
                                             size: 10,
                                             Icons.star,
                                             color: Pallete.whiteColor,
@@ -315,7 +373,8 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                   child: Text('Top Rated Films',
                                       style: Theme.of(context)
                                           .textTheme
-                                          .titleMedium!.copyWith(
+                                          .titleMedium!
+                                          .copyWith(
                                             fontSize: 22,
                                           )),
                                 ),

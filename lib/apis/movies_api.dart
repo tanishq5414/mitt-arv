@@ -82,7 +82,6 @@ class MoviesApi implements IMoviesApi {
       var movies = GetMovieModel.fromJson(data.data);
       return right(movies);
     } catch (e, st) {
-      print(e);
       return left(Failure(e.toString(), st));
     }
   }

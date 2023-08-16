@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/config.dart';
 import 'package:mittarv/features/favourites/controller/favourites_controller.dart';
@@ -20,8 +19,10 @@ class MoviePreviewComponent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return InkWell(
-      onLongPress: (){
-        ref.read(favouritesControllerProvider.notifier).addFavourite(context: context, movieId: movie.id);
+      onLongPress: () {
+        ref
+            .read(favouritesControllerProvider.notifier)
+            .addFavourite(context: context, movieId: movie.id);
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 20),
@@ -76,19 +77,21 @@ class MoviePreviewComponent extends ConsumerWidget {
                           ),
                     ),
                     const Spacer(),
-                    RatingBar.builder(
-                      onRatingUpdate: (v) {},
-                      ignoreGestures: true,
-                      initialRating: ((movie.voteAverage??1)/2).toDouble(),
-                      direction: Axis.horizontal,
-                      itemSize: 15,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemPadding: EdgeInsets.zero,
-                      itemBuilder: (context, _) => const Icon(
-                        size: 10,
-                        Icons.star,
-                        color: Pallete.lightGreyColor,
+                    SizedBox(
+                      height: 10,
+                      width: size.width * 0.14,
+                      child: ListView.builder(
+                        itemBuilder: (context, index) {
+                          return const Icon(
+                            Icons.star,
+                            size: 12,
+                            color: Pallete.lightGreyColor,
+                          );
+                        },
+                        itemCount: ((movie.voteAverage??1)/2).round(),
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
                       ),
                     ),
                   ],
