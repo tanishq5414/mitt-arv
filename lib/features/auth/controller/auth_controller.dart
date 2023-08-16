@@ -4,12 +4,9 @@ import 'package:mittarv/apis/auth_api.dart';
 import 'package:mittarv/core/core.dart';
 import 'package:mittarv/features/auth/view/signinpage.dart';
 import 'package:mittarv/features/home/components/bottomnavbar_component.dart';
-import 'package:mittarv/model/user_model.dart';
+import 'package:mittarv/features/user/controller/user_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final userDataProvider = StateProvider<UserModel?>((ref) {
-  return null;
-});
 final authControllerProvider =
     StateNotifierProvider<AuthControllerNotifier, bool>((ref) {
   final authAPI = ref.watch(authAPIProvider);
@@ -34,11 +31,12 @@ class AuthControllerNotifier extends StateNotifier<bool> {
         ref.read(userDataProvider.notifier).update((state) => r);
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', r.accessToken ?? '');
+        prefs.setString('userId', r.id ?? '');
         prefs.setInt('expiry',
             DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch);
         Navigator.of(context).popUntil((route) => false);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const BottomNavBarView()));
+        Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const BottomNavBarView()));
       });
     } catch (e) {
       // print(e);
@@ -53,10 +51,13 @@ class AuthControllerNotifier extends StateNotifier<bool> {
     try {
       final res = await authApi.register(
           username: username, password: password, email: email);
-      res.fold((l) => showSnackBar(context, l.message), (r) => {
-            showSnackBar(context, 'Registration successful you can sign in now'),
-            Navigator.of(context).push(SignInPageView.route())
-      });
+      res.fold(
+          (l) => showSnackBar(context, l.message),
+          (r) => {
+                showSnackBar(
+                    context, 'Registration successful you can sign in now'),
+                Navigator.of(context).push(SignInPageView.route())
+              });
     } catch (e) {
       // print(e);
     }
@@ -64,13 +65,13 @@ class AuthControllerNotifier extends StateNotifier<bool> {
 
   void logout({required context}) async {
     try {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.remove('token');
-        prefs.remove('expiry');
-        ref.read(userDataProvider.notifier).update((state) => null);
-        Navigator.of(context).popUntil((route) => false);
-        Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const BottomNavBarView()));
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('token');
+      prefs.remove('expiry');
+      ref.read(userDataProvider.notifier).update((state) => null);
+      Navigator.of(context).popUntil((route) => false);
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const BottomNavBarView()));
     } catch (e) {
       // print(e);
     }

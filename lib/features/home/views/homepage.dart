@@ -11,6 +11,7 @@ import 'package:mittarv/features/auth/controller/auth_controller.dart';
 import 'package:mittarv/features/auth/view/signuppage.dart';
 import 'package:mittarv/features/movies/controllers/moviecontroller.dart';
 import 'package:mittarv/features/search/searchpage.dart';
+import 'package:mittarv/features/user/controller/user_controller.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:mittarv/theme/pallete.dart';
 import 'package:palette_generator/palette_generator.dart';

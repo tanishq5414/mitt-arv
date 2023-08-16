@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_octicons/flutter_octicons.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/features/favourites/views/favourites_page.dart';
 import 'package:mittarv/features/home/views/homepage.dart';
+import 'package:mittarv/features/user/controller/user_controller.dart';
 import 'package:mittarv/theme/pallete.dart';
 
-class BottomNavBarView extends StatefulWidget {
-
-   const BottomNavBarView({super.key});
+class BottomNavBarView extends ConsumerStatefulWidget {
+  const BottomNavBarView({super.key});
 
   @override
-  State<BottomNavBarView> createState() => _BottomNavBarViewState();
+  ConsumerState<BottomNavBarView> createState() => _BottomNavBarViewState();
 }
 
-class _BottomNavBarViewState extends State<BottomNavBarView> {
+class _BottomNavBarViewState extends ConsumerState<BottomNavBarView> {
   int selectedIndex = 0;
   @override
   void initState() {
     super.initState();
+    ref.read(userControllerProvider.notifier).getUser();
   }
+
   @override
   Widget build(BuildContext context) {
     var pages = [
