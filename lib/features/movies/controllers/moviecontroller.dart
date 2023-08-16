@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mittarv/apis/movies_api.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/model/genre_model.dart';
+import 'package:mittarv/model/get_movies_model.dart';
 import 'package:mittarv/model/movies_model.dart';
 
 final trendingMoviesProvider = StateProvider<List<MoviesModel>?>((ref) {
@@ -46,6 +47,14 @@ class MovieControllerNotifier extends StateNotifier<bool> {
     final res = await _moviesApi.getGenreList();
     res.fold((l) => null, (r) {
       _ref.read(genreListProvider.notifier).update((state) => r);
+    });
+  }
+
+  Future<GetMovieModel> getMovieDetails(
+      {required context, required movieId}) async {
+    final res = await _moviesApi.getMovieDetails(movieId: movieId);
+    return res.fold((l) => GetMovieModel(), (r) {
+      return r;
     });
   }
 

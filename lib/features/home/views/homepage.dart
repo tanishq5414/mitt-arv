@@ -153,7 +153,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
               ],
             ),
           ),
-          backgroundColor: (_scrollPosition<100)?Pallete.deepBlueColor.withOpacity(0.1):Pallete.deepBlueColor,
+          backgroundColor: (_scrollPosition<100)?Pallete.deepBlueColor.withOpacity(0.0):Pallete.deepBlueColor,
           actions: [
             IconButton(
               iconSize: 30,
@@ -207,6 +207,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                 decoration: BoxDecoration(
                                   gradient: LinearGradient(
                                     colors: [
+                                      Colors.transparent,
                                       Colors.transparent,
                                       Pallete.backgroundColor.withOpacity(0.5),
                                       Pallete.backgroundColor,
@@ -325,7 +326,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                   gridDelegate:
                                       const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
-                                    childAspectRatio: 0.565,
+                                    childAspectRatio: 0.56,
                                     crossAxisSpacing: 15,
                                   ),
                                   padding: EdgeInsets.zero,

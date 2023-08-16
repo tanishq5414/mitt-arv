@@ -6,6 +6,7 @@ import 'package:mittarv/config.dart';
 import 'package:mittarv/core/failure.dart';
 import 'package:mittarv/core/type_defs.dart';
 import 'package:mittarv/model/genre_model.dart';
+import 'package:mittarv/model/get_movies_model.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,6 +22,7 @@ abstract class IMoviesApi {
   FutureEither<List<MoviesModel>> searchMoviesByQuery({required query});
   FutureEither<List<GenreModel>> getGenreList();
   FutureEither<ImageProvider> loadImage(String imagePath);
+  FutureEither<GetMovieModel> getMovieDetails({required movieId});
 }
 
 class MoviesApi implements IMoviesApi {
@@ -68,6 +70,19 @@ class MoviesApi implements IMoviesApi {
       });
       return right(movies);
     } catch (e, st) {
+      return left(Failure(e.toString(), st));
+    }
+  }
+
+  @override
+  FutureEither<GetMovieModel> getMovieDetails({required movieId}) async {
+    try {
+      dio.options.headers['Authorization'] = tmdbacessToken;
+      final data = await dio.get('$tmdbAPIURL/movie/$movieId');
+      var movies = GetMovieModel.fromJson(data.data);
+      return right(movies);
+    } catch (e, st) {
+      print(e);
       return left(Failure(e.toString(), st));
     }
   }

@@ -1,3 +1,8 @@
+import 'package:cool_dropdown/cool_dropdown.dart';
+import 'package:cool_dropdown/enums/dropdown_item_render.dart';
+import 'package:cool_dropdown/enums/result_render.dart';
+import 'package:cool_dropdown/models/cool_dropdown_item.dart';
+import 'package:cool_dropdown/options/dropdown_item_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/common/movie_preview_component.dart';
@@ -71,16 +76,16 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
                     autofocus: true,
-
                     textAlign: TextAlign.left,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
                           color: Pallete.whiteColor,
                         ),
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintStyle: Theme.of(context).textTheme.titleMedium!.copyWith(
-                            color: Pallete.lightGreyColor.withOpacity(0.5),
-                          ),
+                      hintStyle:
+                          Theme.of(context).textTheme.titleMedium!.copyWith(
+                                color: Pallete.lightGreyColor.withOpacity(0.5),
+                              ),
                       fillColor: Pallete.otherBlueColor,
                       filled: true,
                       hintText: 'FIND A FILM',
@@ -99,7 +104,13 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
                   ),
                 ),
               ),
-              const SizedBox(height: 30),
+              Row(
+                children: [
+                  FilterValueDropDownComponent(size, context, ["Popularity", "Highest", "Lowest"]),
+                  FilterValueDropDownComponent(size, context,["Rating", "Highest", "Lowest"]),
+                  FilterValueDropDownComponent(size, context,["Year", "Highest", "Lowest"]),
+                ],
+              ),
               _isLoading
                   ? const Center(child: CircularProgressIndicator())
                   : Expanded(
@@ -124,6 +135,49 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
           ),
         ),
       ),
+    );
+  }
+
+   FilterValueDropDownComponent(Size size, BuildContext context, List<String> items) {
+    return Flexible(
+      flex: 1,
+      child: Container(
+                    width: double.infinity,
+                    child: DropdownButtonHideUnderline(
+                      child: ButtonTheme(
+                        buttonColor: Colors.transparent,
+                        alignedDropdown: true,
+                        child: DropdownButtonFormField(
+                          borderRadius: BorderRadius.circular(10),
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(
+                              gapPadding: 2.0,
+                              borderSide: BorderSide(
+                                color: Color(0xff909Ea9),
+                              ),
+                            ),
+                          ),
+                          focusColor: Colors.white,
+                          focusNode: FocusNode(),
+                          padding: EdgeInsets.zero,
+                          value: items[0],
+                          style:
+                              Theme.of(context).textTheme.bodyMedium!.copyWith(
+                                fontSize: 11,
+                                    color: Pallete.whiteColor,
+                                  ),
+                          dropdownColor: Color(0xff364452),
+                          items: items.map((e) => DropdownMenuItem(
+                                value: e,
+                                child: Text(e),
+                              )).toList(),
+                          onChanged: (value) {
+                            print(value);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
     );
   }
 }

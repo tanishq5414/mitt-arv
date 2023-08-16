@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_octicons/flutter_octicons.dart';
+import 'package:mittarv/features/favourites/views/favourites_page.dart';
 import 'package:mittarv/features/home/views/homepage.dart';
 import 'package:mittarv/theme/pallete.dart';
 
@@ -17,7 +18,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
   Widget build(BuildContext context) {
     var pages = [
       const HomePageView(),
-      const HomePageView(),
+      const FavouritePageView(),
     ];
     var items = const [
       BottomNavigationBarItem(
