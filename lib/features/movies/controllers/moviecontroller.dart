@@ -58,14 +58,4 @@ class MovieControllerNotifier extends StateNotifier<bool> {
     });
   }
 
-  Future<ImageProvider<Object>> loadImage(
-      {required context, required imagePath}) async {
-    final res = await _moviesApi.loadImage(imagePath);
-    return res.fold((l) {
-      null;
-      return Image.asset('assets/images/placeholder.png').image;
-    }, (r) {
-      return r;
-    });
-  }
 }

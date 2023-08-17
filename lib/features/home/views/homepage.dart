@@ -6,6 +6,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 import 'package:mittarv/common/movie_preview_component.dart';
+import 'package:mittarv/common/ratings_component.dart';
 import 'package:mittarv/config.dart';
 import 'package:mittarv/features/auth/controller/auth_controller.dart';
 import 'package:mittarv/features/auth/view/signuppage.dart';
@@ -71,7 +72,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
         trendingMovies.removeWhere((element) => element.title == null);
         trendingMovies.removeWhere(
             (element) => element.genreIds == null || element.genreIds!.isEmpty);
-        _generatePalette();
+        // _generatePalette();
 
         isLoading = false;
       });
@@ -80,7 +81,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
 
   Future<void> _generatePalette() async {
     final imageProvider = NetworkImage(
-      "$tmdbImageURL/${trendingMovies[bannerIndex].posterPath}",
+      "$posterTmdbImageUrl/${trendingMovies[bannerIndex].posterPath}",
     );
     _paletteGenerator = await PaletteGenerator.fromImageProvider(imageProvider);
     _decideTextColor();
@@ -253,7 +254,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: CachedNetworkImageProvider(
-                                      "$tmdbImageURL/${trendingMovies[bannerIndex].backdropPath}",
+                                      "$backdropTmdbImageUrl/${trendingMovies[bannerIndex].backdropPath}",
                                     ),
                                     fit: BoxFit.fitHeight,
                                   ),
@@ -319,26 +320,9 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                                 color: Pallete.lightGreyColor,
                                               ),
                                         ),
-                                        RatingBar.builder(
-                                          onRatingUpdate: (v) {},
-                                          ignoreGestures: true,
-                                          initialRating:
-                                              (trendingMovies[bannerIndex]
-                                                          .voteAverage! /
-                                                      2)
-                                                  .toDouble(),
-                                          direction: Axis.horizontal,
-                                          itemSize: 15,
-                                          allowHalfRating: true,
-                                          itemCount: 5,
-                                          itemPadding: EdgeInsets.zero,
-                                          itemBuilder: (context, _) =>
-                                              const Icon(
-                                            size: 10,
-                                            Icons.star,
-                                            color: Pallete.whiteColor,
-                                          ),
-                                        ),
+                                        BuildRatingsComponent(
+                                          rating: (trendingMovies[bannerIndex]
+                                              .voteAverage??1)/2,),
                                       ],
                                     ),
                                   ],
@@ -436,3 +420,4 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
     );
   }
 }
+

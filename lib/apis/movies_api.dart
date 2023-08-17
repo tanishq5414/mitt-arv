@@ -21,7 +21,6 @@ abstract class IMoviesApi {
   FutureEither<List<MoviesModel>> getTopRatedMovies({required page});
   FutureEither<List<MoviesModel>> searchMoviesByQuery({required query});
   FutureEither<List<GenreModel>> getGenreList();
-  FutureEither<ImageProvider> loadImage(String imagePath);
   FutureEither<GetMovieModel> getMovieDetails({required movieId});
 }
 
@@ -86,15 +85,4 @@ class MoviesApi implements IMoviesApi {
     }
   }
 
-  @override
-  FutureEither<ImageProvider> loadImage(String imagePath) async {
-    try {
-      final data =
-          await NetworkAssetBundle(Uri.parse('$tmdbImageURL$imagePath'))
-              .load('');
-      return right(MemoryImage(data.buffer.asUint8List()));
-    } catch (e, st) {
-      return left(Failure(e.toString(), st));
-    }
-  }
 }
