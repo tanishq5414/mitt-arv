@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/common/ratings_component.dart';
 import 'package:mittarv/config.dart';
-import 'package:mittarv/features/favourites/controller/favourites_controller.dart';
-import 'package:mittarv/features/movies/views/moviepage.dart';
+import 'package:mittarv/features/movies/views/movie_detail_page.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:mittarv/theme/pallete.dart';
 
@@ -28,7 +26,7 @@ class MoviePreviewComponent extends ConsumerWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => MoviePageView(
+                  builder: (context) => MovieDetailPageView(
                         movie: movie,
                       )));
         },

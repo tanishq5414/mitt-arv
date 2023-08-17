@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,7 +12,7 @@ import 'package:mittarv/common/ratings_component.dart';
 import 'package:mittarv/config.dart';
 import 'package:mittarv/features/auth/controller/auth_controller.dart';
 import 'package:mittarv/features/auth/view/signuppage.dart';
-import 'package:mittarv/features/movies/controllers/moviecontroller.dart';
+import 'package:mittarv/features/movies/controllers/movie_controller.dart';
 import 'package:mittarv/features/search/searchpage.dart';
 import 'package:mittarv/features/user/controller/user_controller.dart';
 import 'package:mittarv/model/movies_model.dart';
@@ -33,8 +35,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
   bool isLoading = false;
   //generate random number for bannerIndex
   final int bannerIndex = Random().nextInt(10);
-  Color _iconColor = Colors.white;
-  late PaletteGenerator _paletteGenerator;
+  final Color _iconColor = Colors.white;
 
   @override
   void initState() {
@@ -79,26 +80,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
     }
   }
 
-  Future<void> _generatePalette() async {
-    final imageProvider = NetworkImage(
-      "$posterTmdbImageUrl/${trendingMovies[bannerIndex].posterPath}",
-    );
-    _paletteGenerator = await PaletteGenerator.fromImageProvider(imageProvider);
-    _decideTextColor();
-    setState(() {});
-  }
 
-  void _decideTextColor() {
-    final dominantColor = _paletteGenerator.dominantColor!.color;
-    // Calculate luminance of dominant color
-    final luminance = dominantColor.computeLuminance();
-    // Decide text color based on luminance
-    if (luminance < 0.5) {
-      _iconColor = const Color(0xffD8E0E8);
-    } else {
-      _iconColor = Colors.black;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,13 +207,18 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                   radius: 14,
                   backgroundColor: (user!=null)?Pallete.deepPurpleColor: Pallete.lightGreyColor,
                   child: (user != null)
-                      ? Text(
-                          user.email!.substring(0, 1).toUpperCase(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleMedium!
-                              .copyWith(fontSize: 16),
-                        )
+                      ? Container(
+                        decoration: BoxDecoration(
+                          color: Pallete.deepPurpleColor,
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: NetworkImage(
+                              user.profilePic!,
+                            ),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
                       : null,
                 ),
               ),

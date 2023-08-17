@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/common/movie_preview_component.dart';
-import 'package:mittarv/features/movies/controllers/moviecontroller.dart';
+import 'package:mittarv/features/movies/controllers/movie_controller.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:mittarv/theme/pallete.dart';
 
@@ -20,6 +20,7 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
   final TextEditingController _searchController = TextEditingController();
   List<MoviesModel> _searchResults = [];
   bool _isLoading = false;
+  String selectedSortingOption = "Popularity - Highest";
 
   Future<void> _onSearchTextChanged(String searchText) async {
     if (searchText.isEmpty) {
@@ -41,6 +42,7 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
       _searchResults.removeWhere((element) => element.backdropPath == null);
       _isLoading = false;
     });
+    sortAccordingToFilters();
   }
 
   @override
@@ -52,6 +54,28 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
   @override
   void initState() {
     super.initState();
+  }
+
+  void sortAccordingToFilters() {
+    _searchResults.sort((a, b) {
+      switch (selectedSortingOption) {
+        case "Popularity - Highest":
+          return a.popularity!.compareTo(b.popularity!);
+        case "Popularity - Lowest":
+          return b.popularity!.compareTo(a.popularity!);
+        case "Year - Oldest":
+          return a.releaseDate!.compareTo(b.releaseDate!);
+        case "Year - Newest":
+          return b.releaseDate!.compareTo(a.releaseDate!);
+        case "Rating - Highest":
+          return a.voteAverage!.compareTo(b.voteAverage!);
+        case "Rating - Lowest":
+          return b.voteAverage!.compareTo(a.voteAverage!);
+        default:
+          return 0;
+      }
+    });
+    setState(() {});
   }
 
   @override
@@ -102,11 +126,23 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
               Row(
                 children: [
                   filterValueDropDownComponent(
-                      size, context, ["Popularity", "Highest", "Lowest"]),
-                  filterValueDropDownComponent(
-                      size, context, ["Rating", "Highest", "Lowest"]),
-                  filterValueDropDownComponent(
-                      size, context, ["Year", "Highest", "Lowest"]),
+                    size,
+                    context,
+                    [
+                      "Popularity - Highest",
+                      "Popularity - Lowest",
+                      "Year - Oldest",
+                      "Year - Newest",
+                      "Rating - Highest",
+                      "Rating - Lowest",
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        selectedSortingOption = value;
+                      });
+                      sortAccordingToFilters();
+                    },
+                  ),
                 ],
               ),
               _isLoading
@@ -137,7 +173,8 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
   }
 
   filterValueDropDownComponent(
-      Size size, BuildContext context, List<String> items) {
+      Size size, BuildContext context, List<String> items,
+      {Function? onChanged}) {
     return Flexible(
       flex: 1,
       child: SizedBox(
@@ -171,7 +208,11 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
                         child: Text(e),
                       ))
                   .toList(),
-              onChanged: (value) {},
+              onChanged: (value) {
+                if (onChanged != null) {
+                  onChanged(value);
+                }
+              },
             ),
           ),
         ),

@@ -25,7 +25,7 @@ class UserControllerNotifier extends StateNotifier<bool> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token') ?? "";
     var userId = prefs.getString('userId') ?? "";
-    if(token == "" || userId == "") {
+    if (token == "" || userId == "") {
       return;
     }
     final res = await _userAPI.getUser(userId: userId, token: token);

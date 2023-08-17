@@ -4,29 +4,27 @@ import 'package:flutter_octicons/flutter_octicons.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/common/ratings_component.dart';
 import 'package:mittarv/config.dart';
-import 'package:mittarv/core/core.dart';
 import 'package:mittarv/features/favourites/controller/favourites_controller.dart';
-import 'package:mittarv/features/user/controller/user_controller.dart';
 
 import 'package:mittarv/model/movies_model.dart';
 import 'package:mittarv/theme/pallete.dart';
 
-class MoviePageView extends ConsumerStatefulWidget {
+class MovieDetailPageView extends ConsumerStatefulWidget {
   final MoviesModel? movie;
-  const MoviePageView({
+  const MovieDetailPageView({
     super.key,
     required this.movie,
   });
 
   @override
-  ConsumerState<MoviePageView> createState() => _MoviePageViewState();
+  ConsumerState<MovieDetailPageView> createState() => _MoviePageViewState();
 }
 
-class _MoviePageViewState extends ConsumerState<MoviePageView> {
+class _MoviePageViewState extends ConsumerState<MovieDetailPageView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       checkFavourite();
     });
   }
@@ -78,8 +76,6 @@ class _MoviePageViewState extends ConsumerState<MoviePageView> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    var user = ref.watch(userDataProvider);
-    var favourites = ref.watch(favouritesMovieProvider);
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Pallete.deepBlueColor,
