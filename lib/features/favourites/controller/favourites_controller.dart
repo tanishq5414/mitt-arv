@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/features/movies/controllers/movie_controller.dart';
+import 'package:mittarv/features/user/controller/user_controller.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,9 +19,15 @@ class FavouritesControllerNotifier extends StateNotifier<bool> {
 
   Future<void> getFavourites({required context}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final favourites = prefs.getStringList('favourites');
+    var favourites = [];
+    final user = _ref.read(userDataProvider);
+    if (user != null) {
+      favourites = user.fav!;
+    } else {
+      favourites = prefs.getStringList('favourites') ?? [];
+    }
     final List<MoviesModel> movies = [];
-    if (favourites != null) {
+    if (favourites.isNotEmpty) {
       for (int i = 0; i < favourites.length; i++) {
         final movie = await _ref
             .read(movieControllerProvider.notifier)
@@ -44,13 +51,17 @@ class FavouritesControllerNotifier extends StateNotifier<bool> {
         );
       }
       final reversedmovies = movies.reversed;
-      _ref.read(favouritesMovieProvider.notifier).update((state) => reversedmovies.toList());
+      _ref
+          .read(favouritesMovieProvider.notifier)
+          .update((state) => reversedmovies.toList());
     }
+    
   }
 
   Future<void> addFavourite({required context, required movieId}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final favourites = prefs.getStringList('favourites');
+    final user = _ref.read(userDataProvider);
     if (favourites != null) {
       if (!favourites.contains(movieId.toString())) {
         favourites.add(movieId.toString());
@@ -58,6 +69,10 @@ class FavouritesControllerNotifier extends StateNotifier<bool> {
       }
     } else {
       prefs.setStringList('favourites', [movieId.toString()]);
+    }
+    if (user != null) {
+      var fav = prefs.getStringList('favourites');
+      _ref.read(userControllerProvider.notifier).updateFavorite(fav!);
     }
     getFavourites(context: context);
   }
@@ -70,6 +85,11 @@ class FavouritesControllerNotifier extends StateNotifier<bool> {
         favourites.remove(movieId.toString());
         prefs.setStringList('favourites', favourites);
       }
+    }
+    final user = _ref.read(userDataProvider);
+    if (user != null) {
+      var fav = prefs.getStringList('favourites');
+      _ref.read(userControllerProvider.notifier).updateFavorite(fav!);
     }
     getFavourites(context: context);
   }

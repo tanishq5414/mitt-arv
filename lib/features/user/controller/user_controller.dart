@@ -33,4 +33,18 @@ class UserControllerNotifier extends StateNotifier<bool> {
        _ref.read(userDataProvider.notifier).update((state) => r);
     });
   }
+
+  Future<void> updateFavorite(List<String> favourites) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token') ?? "";
+    var userId = prefs.getString('userId') ?? "";
+    if (token == "" || userId == "") {
+      return;
+    }
+    final res = await _userAPI.updateFavorite(
+        userId: userId, token: token, favourites: favourites);
+    res.fold((l) => null, (r) {
+      getUser();
+    });
+  }
 }

@@ -32,8 +32,8 @@ class AuthControllerNotifier extends StateNotifier<bool> {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('token', r.accessToken ?? '');
         prefs.setString('userId', r.id ?? '');
-        prefs.setInt('expiry',
-            DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch);
+        prefs.setString('expiry',
+            DateTime.now().add(const Duration(days: 1)).millisecondsSinceEpoch.toString());
         Navigator.of(context).popUntil((route) => false);
         Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => const BottomNavBarView()));

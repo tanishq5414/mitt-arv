@@ -21,6 +21,7 @@ class _FavouritePageViewState extends ConsumerState<FavouritePageView> {
         .getFavourites(context: context);
   }
 
+
   @override
   Widget build(BuildContext context) {
     List<MoviesModel>? favourites = ref.watch(favouritesMovieProvider) ?? [];
@@ -28,7 +29,8 @@ class _FavouritePageViewState extends ConsumerState<FavouritePageView> {
       appBar: AppBar(
         title: Container(
           margin: const EdgeInsets.only(left: 20),
-          child: const Text('Favourites'),),
+          child: const Text('Favourites'),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(

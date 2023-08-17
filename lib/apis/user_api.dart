@@ -13,6 +13,10 @@ final userAPIProvider = Provider((ref) {
 abstract class IUserAPI {
   FutureEither<UserModel> getUser(
       {required String userId, required String token});
+
+  FutureEither<void> updateFavorite(
+      {required String userId, required String token, required List<String> favourites});
+
 }
 
 class UserAPI implements IUserAPI {
@@ -23,6 +27,20 @@ class UserAPI implements IUserAPI {
       dio.options.headers['x-access-token'] = token;
       var response = await dio.get('$authAPIURL/test/user/$userId');
       return right(UserModel.fromJson(response.data));
+    } catch (e, st) {
+      return left(Failure(e.toString(), st));
+    }
+  }
+
+  @override
+  FutureEither<void> updateFavorite(
+      {required String userId, required String token, required List<String> favourites}) async {
+    try {
+      dio.options.headers['x-access-token'] = token;
+      var response = await dio.put('$authAPIURL/test/user/fav/$userId', data: {
+        "favs": favourites
+      });
+      return right(null);
     } catch (e, st) {
       return left(Failure(e.toString(), st));
     }

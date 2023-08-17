@@ -213,7 +213,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                             image: NetworkImage(
-                              user.profilePic!,
+                              user.profilePic??'',
                             ),
                             fit: BoxFit.cover,
                           ),
