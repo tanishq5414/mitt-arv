@@ -40,7 +40,7 @@ class _MoviePageViewState extends ConsumerState<MovieDetailPageView> {
   }
 
   void addToFavourites() {
-    ref.read(favouritesControllerProvider.notifier).addFavourite(
+    ref.read(favouritesControllerProvider.notifier).toggleFavourite(
           context: context,
           movieId: widget.movie!.id,
         );
@@ -50,7 +50,7 @@ class _MoviePageViewState extends ConsumerState<MovieDetailPageView> {
   }
 
   void removeFromFavourites() {
-    ref.read(favouritesControllerProvider.notifier).removeFavourite(
+    ref.read(favouritesControllerProvider.notifier).toggleFavourite(
           context: context,
           movieId: widget.movie!.id,
         );

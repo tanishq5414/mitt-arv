@@ -19,15 +19,18 @@ class FavouritesControllerNotifier extends StateNotifier<bool> {
 
   Future<void> getFavourites({required context}) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var favourites = [];
+    List<String> favourites = [];
     final user = _ref.read(userDataProvider);
     if (user != null) {
       favourites = user.fav!;
     } else {
       favourites = prefs.getStringList('favourites') ?? [];
     }
+    if(favourites.isEmpty){
+      _ref.read(favouritesMovieProvider.notifier).update((state) => []);
+      return;
+    }
     final List<MoviesModel> movies = [];
-    if (favourites.isNotEmpty) {
       for (int i = 0; i < favourites.length; i++) {
         final movie = await _ref
             .read(movieControllerProvider.notifier)
@@ -49,48 +52,29 @@ class FavouritesControllerNotifier extends StateNotifier<bool> {
             voteCount: movie.voteCount,
           ),
         );
-      }
       final reversedmovies = movies.reversed;
       _ref
           .read(favouritesMovieProvider.notifier)
           .update((state) => reversedmovies.toList());
     }
+  }
+
+  Future<void> toggleFavourite({required context, required movieId}) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> favourites = _ref.read(userDataProvider)?.fav?? prefs.getStringList('favourites') ?? [];
     
-  }
-
-  Future<void> addFavourite({required context, required movieId}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final favourites = prefs.getStringList('favourites');
-    final user = _ref.read(userDataProvider);
-    if (favourites != null) {
-      if (!favourites.contains(movieId.toString())) {
-        favourites.add(movieId.toString());
-        prefs.setStringList('favourites', favourites);
-      }
+    if (favourites.contains(movieId.toString())) {
+      favourites.remove(movieId.toString());
     } else {
-      prefs.setStringList('favourites', [movieId.toString()]);
+      favourites.add(movieId.toString());
     }
-    if (user != null) {
-      var fav = prefs.getStringList('favourites');
-      _ref.read(userControllerProvider.notifier).updateFavorite(fav!);
+    
+    if (_ref.read(userDataProvider) != null) {
+      _ref.read(userControllerProvider.notifier).updateFavorite(favourites);
+    } else {
+      prefs.setStringList('favourites', favourites);
     }
-    getFavourites(context: context);
-  }
-
-  Future<void> removeFavourite({required context, required movieId}) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final favourites = prefs.getStringList('favourites');
-    if (favourites != null) {
-      if (favourites.contains(movieId.toString())) {
-        favourites.remove(movieId.toString());
-        prefs.setStringList('favourites', favourites);
-      }
-    }
-    final user = _ref.read(userDataProvider);
-    if (user != null) {
-      var fav = prefs.getStringList('favourites');
-      _ref.read(userControllerProvider.notifier).updateFavorite(fav!);
-    }
-    getFavourites(context: context);
+    
+    await getFavourites(context: context);
   }
 }

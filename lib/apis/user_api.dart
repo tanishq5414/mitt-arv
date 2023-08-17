@@ -37,7 +37,7 @@ class UserAPI implements IUserAPI {
       {required String userId, required String token, required List<String> favourites}) async {
     try {
       dio.options.headers['x-access-token'] = token;
-      var response = await dio.put('$authAPIURL/test/user/fav/$userId', data: {
+      await dio.put('$authAPIURL/test/user/fav/$userId', data: {
         "favs": favourites
       });
       return right(null);
