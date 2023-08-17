@@ -60,17 +60,17 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
     _searchResults.sort((a, b) {
       switch (selectedSortingOption) {
         case "Popularity - Highest":
-          return a.popularity!.compareTo(b.popularity!);
-        case "Popularity - Lowest":
           return b.popularity!.compareTo(a.popularity!);
+        case "Popularity - Lowest":
+          return a.popularity!.compareTo(b.popularity!);
         case "Year - Oldest":
           return a.releaseDate!.compareTo(b.releaseDate!);
         case "Year - Newest":
           return b.releaseDate!.compareTo(a.releaseDate!);
         case "Rating - Highest":
-          return a.voteAverage!.compareTo(b.voteAverage!);
-        case "Rating - Lowest":
           return b.voteAverage!.compareTo(a.voteAverage!);
+        case "Rating - Lowest":
+          return a.voteAverage!.compareTo(b.voteAverage!);
         default:
           return 0;
       }

@@ -21,8 +21,8 @@ class _BottomNavBarViewState extends ConsumerState<BottomNavBarView> {
   @override
   void initState() {
     super.initState();
-    // initializePreferences();
-    // checkExpiryAndPerformLogout();
+    initializePreferences();
+    checkExpiryAndPerformLogout();
     ref.read(userControllerProvider.notifier).getUser();
   }
   Future<void> initializePreferences() async {

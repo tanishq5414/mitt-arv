@@ -30,7 +30,7 @@ class UserControllerNotifier extends StateNotifier<bool> {
     }
     final res = await _userAPI.getUser(userId: userId, token: token);
     res.fold((l) => null, (r) {
-      _ref.read(userDataProvider.notifier).update((state) => r);
+       _ref.read(userDataProvider.notifier).update((state) => r);
     });
   }
 }

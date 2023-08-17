@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Portal(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'MittaRV',
         theme: AppTheme.theme,
         home: const BottomNavBarView(),
