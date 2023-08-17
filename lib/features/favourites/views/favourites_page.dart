@@ -54,6 +54,9 @@ class _FavouritePageViewState extends ConsumerState<FavouritePageView> {
                 },
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
           ],
         ),
       ),

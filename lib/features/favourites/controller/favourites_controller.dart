@@ -43,7 +43,8 @@ class FavouritesControllerNotifier extends StateNotifier<bool> {
           ),
         );
       }
-      _ref.read(favouritesMovieProvider.notifier).update((state) => movies);
+      final reversedmovies = movies.reversed;
+      _ref.read(favouritesMovieProvider.notifier).update((state) => reversedmovies.toList());
     }
   }
 
