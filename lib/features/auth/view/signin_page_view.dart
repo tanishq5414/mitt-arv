@@ -2,22 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/common/appbar_component.dart';
 import 'package:mittarv/features/auth/controller/auth_controller.dart';
-import 'package:mittarv/features/auth/view/signinpage.dart';
+import 'package:mittarv/features/auth/view/signup_page_view.dart';
 
-class SignUpPageView extends ConsumerStatefulWidget {
+class SignInPageView extends ConsumerStatefulWidget {
   static route() =>
-      MaterialPageRoute(builder: (context) => const SignUpPageView());
-  const SignUpPageView({super.key});
+      MaterialPageRoute(builder: (context) => const SignInPageView());
+  const SignInPageView({super.key});
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _SignUpPageViewState();
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignInPageViewState();
 }
 
-class _SignUpPageViewState extends ConsumerState<SignUpPageView> {
+class _SignInPageViewState extends ConsumerState<SignInPageView> {
   final _formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
-  final emailController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +31,7 @@ class _SignUpPageViewState extends ConsumerState<SignUpPageView> {
               Container(
                 margin: const EdgeInsets.only(top: 20),
                 child: const Text(
-                  'Sign Up',
+                  'Sign In',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -42,7 +41,7 @@ class _SignUpPageViewState extends ConsumerState<SignUpPageView> {
               Container(
                 margin: const EdgeInsets.only(top: 20),
                 child: const Text(
-                  'Create an account to continue!',
+                  'Sign in to continue!',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -65,23 +64,6 @@ class _SignUpPageViewState extends ConsumerState<SignUpPageView> {
               Container(
                 margin: const EdgeInsets.only(top: 20),
                 child: TextFormField(
-                  controller: emailController,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your email address';
-                    }
-                    if (!value.contains('@') || !value.contains('.')) {
-                      return 'Please enter a valid email address';
-                    }
-                    return null;
-                  },
-                  decoration: inputDecoration('Email Address'),
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 20),
-                child: TextFormField(
                   controller: passwordController,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -95,35 +77,18 @@ class _SignUpPageViewState extends ConsumerState<SignUpPageView> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 20),
-                child: TextFormField(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please confirm your password';
-                    }else if(value != passwordController.text){
-                      return 'Password does not match';
-                    }
-                    return null;
-                  },
-                  decoration: inputDecoration('Confirm Password'),
-                  obscureText: true,
-                ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(top: 20),
                 child: SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        ref.read(authControllerProvider.notifier).register(
+                        ref.read(authControllerProvider.notifier).login(
                             context: context,
                             username: usernameController.text,
-                            password: passwordController.text,
-                            email: emailController.text);
+                            password: passwordController.text);
                       }
                     },
-                    child: const Text('Sign Up'),
+                    child: const Text('Sign In'),
                   ),
                 ),
               ),
@@ -135,9 +100,9 @@ class _SignUpPageViewState extends ConsumerState<SignUpPageView> {
                     const Text('Already have an account?'),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(context, SignInPageView.route());
+                        Navigator.push(context, SignUpPageView.route());
                       },
-                      child: const Text('Sign In'),
+                      child: const Text('Sign Up'),
                     ),
                   ],
                 ),

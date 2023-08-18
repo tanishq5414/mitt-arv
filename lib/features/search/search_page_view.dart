@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/common/common.dart';
 import 'package:mittarv/common/movie_preview_component.dart';
-import 'package:mittarv/features/movies/controllers/movie_controller.dart';
+import 'package:mittarv/features/movies/controllers/movies_controller.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:mittarv/theme/pallete.dart';
 

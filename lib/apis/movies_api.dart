@@ -4,7 +4,7 @@ import 'package:mittarv/config.dart';
 import 'package:mittarv/core/failure.dart';
 import 'package:mittarv/core/type_defs.dart';
 import 'package:mittarv/model/genre_model.dart';
-import 'package:mittarv/model/get_movies_model.dart';
+import 'package:mittarv/model/get_movie_detail_model.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

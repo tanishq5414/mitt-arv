@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mittarv/apis/auth_api.dart';
 import 'package:mittarv/core/core.dart';
-import 'package:mittarv/features/auth/view/signinpage.dart';
-import 'package:mittarv/features/home/components/bottomnavbar_component.dart';
+import 'package:mittarv/features/auth/view/signin_page_view.dart';
+import 'package:mittarv/features/home/components/bottom_nav_bar_component.dart';
 import 'package:mittarv/features/user/controller/user_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

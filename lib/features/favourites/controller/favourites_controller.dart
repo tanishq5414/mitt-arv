@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mittarv/features/movies/controllers/movie_controller.dart';
+import 'package:mittarv/features/movies/controllers/movies_controller.dart';
 import 'package:mittarv/features/user/controller/user_controller.dart';
 import 'package:mittarv/model/movies_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
