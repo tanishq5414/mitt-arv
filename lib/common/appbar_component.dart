@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mittarv/theme/pallete.dart';
 
 AppBar customAppBar({required BuildContext context, List<Widget>? actions}) {
-  return AppBar(
+   return AppBar(
     actions: actions,
     automaticallyImplyLeading: false,
     title: Container(

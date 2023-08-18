@@ -88,6 +88,7 @@ class _MoviePageViewState extends ConsumerState<MovieDetailPageView> {
           children: [
             SizedBox(
               height: size.height * 0.3,
+              width: size.width,
               child: Image.network(
                 '$backdropTmdbImageUrl/${widget.movie!.backdropPath}',
                 fit: BoxFit.cover,
@@ -103,8 +104,8 @@ class _MoviePageViewState extends ConsumerState<MovieDetailPageView> {
                   width: size.width * 0.05,
                 ),
                 Container(
-                  height: size.height * 0.2,
-                  width: size.width * 0.3,
+                  height: (size.width>600)?100:size.height * 0.2,
+                  width: (size.width>600)?60:size.width * 0.3,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(

@@ -19,16 +19,18 @@ class MoviePreviewComponent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-      width: size.width * 0.4,
-      height: size.width * 0.6,
+      width: (size.width > 600) ? 100 : size.width * 0.4,
+      height: (size.width > 600) ? 160 : size.width * 0.6,
       child: GestureDetector(
         onTap: () {
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MovieDetailPageView(
-                        movie: movie,
-                      )));
+            context,
+            MaterialPageRoute(
+              builder: (context) => MovieDetailPageView(
+                movie: movie,
+              ),
+            ),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.only(bottom: 20),
@@ -36,19 +38,19 @@ class MoviePreviewComponent extends ConsumerWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
             ),
-            height: size.width * 0.6,
-            width: size.width * 0.4,
+            height: (size.width > 600) ? 160 : size.width * 0.6,
+            width: (size.width > 600) ? 100 : size.width * 0.4,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: size.width * 0.6,
-                  width: size.width * 0.4,
+                  height: (size.width > 600) ? 160 : size.width * 0.6,
+                  width: (size.width > 600) ? 100 : size.width * 0.4,
                   child: Row(
                     children: [
                       Container(
-                        height: size.width * 0.6,
-                        width: size.width * 0.4,
+                        height: (size.width > 600) ? 160 : size.width * 0.6,
+                        width: (size.width > 600) ? 100 : size.width * 0.4,
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Pallete.whiteColor.withOpacity(0.2),

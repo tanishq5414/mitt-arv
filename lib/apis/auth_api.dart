@@ -25,6 +25,8 @@ class AuthApi implements IAuthApi {
   FutureEither<UserModel> login(
       {required String username, required String password}) async {
     try {
+      dio.options.headers['content-Type'] = 'application/json';
+      dio.options.headers['Access-Control-Allow-Origin'] = '*';
       var res = await dio.post('$authAPIURL/auth/signin',
           data: {'username': username, 'password': password});
       return right(UserModel.fromJson(res.data));

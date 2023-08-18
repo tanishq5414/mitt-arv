@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mittarv/common/common.dart';
 import 'package:mittarv/common/movie_preview_component.dart';
 import 'package:mittarv/features/favourites/controller/favourites_controller.dart';
 import 'package:mittarv/model/movies_model.dart';
@@ -21,9 +22,9 @@ class _FavouritePageViewState extends ConsumerState<FavouritePageView> {
         .getFavourites(context: context);
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
     List<MoviesModel>? favourites = ref.watch(favouritesMovieProvider) ?? [];
     return Scaffold(
       appBar: AppBar(
@@ -43,10 +44,11 @@ class _FavouritePageViewState extends ConsumerState<FavouritePageView> {
               child: GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.567,
-                ),
+                gridDelegate: (size.width > 1400)
+                    ? Commons.desktopGridDelegate(size)
+                    : (size.width > 650 && size.width < 1400)
+                        ? Commons.tabletGridDelegate(size)
+                        : Commons.phoneGridDelegate(size),
                 itemCount: favourites.length,
                 itemBuilder: (context, index) {
                   return MoviePreviewComponent(

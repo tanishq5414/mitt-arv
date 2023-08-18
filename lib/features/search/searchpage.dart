@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mittarv/common/common.dart';
 import 'package:mittarv/common/movie_preview_component.dart';
 import 'package:mittarv/features/movies/controllers/movie_controller.dart';
 import 'package:mittarv/model/movies_model.dart';
@@ -150,11 +151,11 @@ class _SearchPageViewState extends ConsumerState<SearchPageView> {
                   : Expanded(
                       flex: 1,
                       child: GridView.builder(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 0.574,
-                        ),
+                        gridDelegate: (size.width > 1400)
+                                      ? Commons.desktopGridDelegate(size)
+                                      : (size.width > 650 && size.width < 1400)
+                                          ? Commons.tabletGridDelegate(size)
+                                          : Commons.phoneGridDelegate(size),
                         shrinkWrap: true,
                         itemCount: _searchResults.length,
                         itemBuilder: (context, index) {

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
+import 'package:mittarv/common/common.dart';
 import 'package:mittarv/common/movie_preview_component.dart';
 import 'package:mittarv/common/ratings_component.dart';
 import 'package:mittarv/config.dart';
@@ -79,8 +80,6 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
       });
     }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -187,9 +186,7 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
-                              ref
-                                  .read(authControllerProvider.notifier)
-                                  .logout(
+                              ref.read(authControllerProvider.notifier).logout(
                                     context: context,
                                   );
                             },
@@ -205,20 +202,22 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                 margin: const EdgeInsets.only(right: 20),
                 child: CircleAvatar(
                   radius: 14,
-                  backgroundColor: (user!=null)?Pallete.deepPurpleColor: Pallete.lightGreyColor,
+                  backgroundColor: (user != null)
+                      ? Pallete.deepPurpleColor
+                      : Pallete.lightGreyColor,
                   child: (user != null)
                       ? Container(
-                        decoration: BoxDecoration(
-                          color: Pallete.deepPurpleColor,
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              user.profilePic??'',
+                          decoration: BoxDecoration(
+                            color: Pallete.deepPurpleColor,
+                            shape: BoxShape.circle,
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                user.profilePic ?? '',
+                              ),
+                              fit: BoxFit.cover,
                             ),
-                            fit: BoxFit.cover,
                           ),
-                        ),
-                      )
+                        )
                       : null,
                 ),
               ),
@@ -236,14 +235,16 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                           Stack(
                             children: [
                               Container(
-                                height: size.height * 0.3,
+                                height: (size.width > 600)
+                                    ? size.height * 0.3
+                                    : size.height * 0.3,
                                 width: size.width,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: CachedNetworkImageProvider(
                                       "$backdropTmdbImageUrl/${trendingMovies[bannerIndex].backdropPath}",
                                     ),
-                                    fit: BoxFit.fitHeight,
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
@@ -309,7 +310,10 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                         ),
                                         BuildRatingsComponent(
                                           rating: (trendingMovies[bannerIndex]
-                                              .voteAverage??1)/2,),
+                                                      .voteAverage ??
+                                                  1) /
+                                              2,
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -354,12 +358,11 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
                                   height: size.height * 0.02,
                                 ),
                                 GridView.builder(
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 0.56,
-                                    crossAxisSpacing: 15,
-                                  ),
+                                  gridDelegate: (size.width > 1400)
+                                      ? Commons.desktopGridDelegate(size)
+                                      : (size.width > 650 && size.width < 1400)
+                                          ? Commons.tabletGridDelegate(size)
+                                          : Commons.phoneGridDelegate(size),
                                   padding: EdgeInsets.zero,
                                   physics: const NeverScrollableScrollPhysics(),
                                   shrinkWrap: true,
@@ -407,4 +410,3 @@ class _HomePageViewState extends ConsumerState<HomePageView> {
     );
   }
 }
-
